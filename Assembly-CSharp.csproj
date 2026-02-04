@@ -65,21 +65,32 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\Config\GetData.cs" />
+    <Compile Include="Assets\Scripts\GoogleOAuthListener.cs" />
     <Compile Include="Assets\Scripts\Controller\UI\PanelController.cs" />
     <Compile Include="Assets\Scripts\Model\UI\Panel\PanelDangKy.cs" />
     <Compile Include="Assets\Scripts\Config\ConnectSQL.cs" />
     <Compile Include="Assets\Scripts\Config\SessionManager.cs" />
+    <Compile Include="Assets\GoogleSignIn\Future.cs" />
+    <Compile Include="Assets\Scripts\GoogleLoginButton.cs" />
     <Compile Include="Assets\Scripts\Controller\AvatarController.cs" />
+    <Compile Include="Assets\GoogleSignIn\Impl\BaseObject.cs" />
     <Compile Include="Assets\Scripts\Model\UI\Panel\PanelButton.cs" />
     <Compile Include="Assets\Scripts\Model\UI\Button\UIButton.cs" />
     <Compile Include="Assets\Scripts\Repository\AccountRepository.cs" />
     <Compile Include="Assets\Scripts\Controller\AccountController.cs" />
+    <Compile Include="Assets\GoogleSignIn\Impl\GoogleSignInImpl.cs" />
+    <Compile Include="Assets\GoogleSignIn\Impl\SignInHelperObject.cs" />
     <Compile Include="Assets\Scripts\Model\UI\Panel\UIPanel.cs" />
+    <Compile Include="Assets\GoogleSignIn\GoogleSignIn.cs" />
     <Compile Include="Assets\Scripts\Controller\UI\ButtonController.cs" />
     <Compile Include="Assets\Scripts\Repository\Impl\AccountRepositoryImpl.cs" />
     <Compile Include="Assets\Scripts\Model\UI\Panel\PanelDangNhap.cs" />
     <Compile Include="Assets\Scripts\Service\AccountService.cs" />
+    <Compile Include="Assets\GoogleSignIn\GoogleSignInStatusCode.cs" />
     <Compile Include="Assets\Scripts\Model\UI\Button\ButtonPanel.cs" />
+    <Compile Include="Assets\GoogleSignIn\GoogleSignInUser.cs" />
+    <Compile Include="Assets\GoogleSignIn\GoogleSignInConfiguration.cs" />
+    <Compile Include="Assets\GoogleSignIn\Impl\NativeFuture.cs" />
     <Compile Include="Assets\Scripts\Model\Account.cs" />
   </ItemGroup>
   <ItemGroup>

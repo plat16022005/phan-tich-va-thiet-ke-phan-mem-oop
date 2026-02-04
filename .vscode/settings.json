@@ -56,5 +56,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "Heroic Chronicles.sln"
+    "dotnet.defaultSolution": "phan-tich-va-thiet-ke-phan-mem-oop.sln"
 }

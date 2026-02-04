@@ -15,16 +15,16 @@ public class AccountController : MonoBehaviour
     [SerializeField] private TMP_InputField rePassword_register;
     [SerializeField] private TMP_InputField gmail_register;
 
-    private AccountService accountService;
+    // private AccountService accountService;
 
-    private void Awake()
-    {
-        accountService = new AccountService();
-    }
+    // private void Awake()
+    // {
+    //     accountService = new AccountService();
+    // }
 
     public void onClickLogin()
     {
-        if (accountService.login(username_login.text, password_login.text))
+        if (AccountService.Instance.login(username_login.text, password_login.text))
         {
             SceneManager.LoadScene("CreateCharacter");
         }
@@ -35,7 +35,7 @@ public class AccountController : MonoBehaviour
     }
     public void onClickRegister()
     {
-        if(accountService.register(username_register.text, password_register.text, rePassword_register.text, gmail_register.text))
+        if(AccountService.Instance.register(username_register.text, password_register.text, rePassword_register.text, gmail_register.text))
         {
             SceneManager.LoadScene("CreateCharacter");
             Debug.Log("Đăng kí thành công");
