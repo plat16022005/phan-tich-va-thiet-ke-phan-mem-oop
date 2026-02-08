@@ -10,4 +10,5 @@ public interface AccountRepository
     public Account CreateGoogleAccount(string email, string sub);
     public Account findAccountBySub(string sub);
     public void LinkGoogle(Account acc, string sub);
+    public void ChangePass(int account_id, string newpass);
 }

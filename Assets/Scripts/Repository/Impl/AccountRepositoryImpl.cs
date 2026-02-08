@@ -181,4 +181,15 @@ public class AccountRepositoryImpl : AccountRepository
             cmd.ExecuteNonQuery();
         }
     }
+    public void ChangePass(int account_id, string newpass)
+    {
+        using(MySqlConnection conn = new MySqlConnection(ConnectSQL.connectionString))
+        {
+            conn.Open();
+            var cmd = new MySqlCommand(@"UPDATE Account SET password = @newpass WHERE id = @account_id", conn);
+            cmd.Parameters.AddWithValue("@newpass", newpass);
+            cmd.Parameters.AddWithValue("@account_id", account_id);
+            cmd.ExecuteNonQuery();
+        }
+    }
 }
