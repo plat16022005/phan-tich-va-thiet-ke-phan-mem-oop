@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class AvatarController : MonoBehaviour
 {
+    public TMP_InputField BoxName;
     [Header("Avatar")]
     public SpriteRenderer hair;
     public Sprite[] hairOptions;
@@ -259,5 +260,9 @@ public class AvatarController : MonoBehaviour
         BoxClass.text = ClassString[classIndex];
         UpdateRaceDetail();
         UpdateClassDetail();
+    }
+    public void CreateNewCharacter()
+    {
+        PlayerService.Instance.CreatePlayer(BoxName.text, hairIndex, eyesIndex, noseIndex, mouthIndex, raceIndex, classIndex);
     }
 }

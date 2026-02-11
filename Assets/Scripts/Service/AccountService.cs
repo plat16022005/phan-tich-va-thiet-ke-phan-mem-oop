@@ -1,22 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class AccountService: MonoBehaviour
 {
     private AccountRepository accountRepository = new AccountRepositoryImpl();
+    private CharactersRepository charactersRepository = new CharactersRepositoryImpl();
     public static AccountService Instance;
 
     void Awake()
     {
         Instance = this;
     }
-    public bool login(string username, string password)
+    public void login(string username, string password)
     {
         if (string.IsNullOrEmpty(password))
         {
             GameManager.Instance.HienThongBao("Mật khẩu không được để trống!");
-            return false;
+            return;
         }
 
         Account account = accountRepository.findAccountByUsername(username);
@@ -24,17 +27,25 @@ public class AccountService: MonoBehaviour
         if (account == null)
         {
             GameManager.Instance.HienThongBao("Tài khoản không tồn tại!");
-            return false;
+            return;
         }
 
-        if (password == account.password)
+        if (password != account.password)
         {
-            SessionManager.Instance.account = account;
-            return true;
+            GameManager.Instance.HienThongBao("Mật khẩu không đúng!");
+            return;
         }
 
-        GameManager.Instance.HienThongBao("Mật khẩu không đúng!");
-        return false;
+        SessionManager.Instance.account = account;
+        if (charactersRepository.GetCharacterByAccountId(account.id) == null)
+        {
+            SceneManager.LoadScene("CreateCharacter");
+            GameManager.Instance.HienThongBao("Chào mừng người chơi mới! Hãy mau tạo nhân vật cho mình và bắt đầu cuộc phiêu lưu nào!");
+        }
+        else
+        {
+            SceneManager.LoadScene("Lobby");
+        }
     }
 
     public void loginWithGoogle(string gmail, string sub)
@@ -43,14 +54,43 @@ public class AccountService: MonoBehaviour
         Account acc2 = accountRepository.findAccountBySub(sub);
         if (acc1 != null && acc2 != null && acc1.id == acc2.id)
         {
+            SessionManager.Instance.account = acc1;
+            if (charactersRepository.GetCharacterByAccountId(SessionManager.Instance.account.id) == null)
+            {
+                Debug.Log("Heheboi");
+                SceneManager.LoadScene("CreateCharacter");
+                GameManager.Instance.HienThongBao("Chào mừng người chơi mới! Hãy mau tạo nhân vật cho mình và bắt đầu cuộc phiêu lưu nào!");
+            }
+            else
+            {
+                SceneManager.LoadScene("Lobby");
+            }            
             return;
         }
         if (acc1 != null && acc2 == null)
         {
             accountRepository.LinkGoogle(acc1, sub);
+            SessionManager.Instance.account = acc1;
+            if (charactersRepository.GetCharacterByAccountId(SessionManager.Instance.account.id) == null)
+            {
+                Debug.Log("Heheboi");
+                SceneManager.LoadScene("CreateCharacter");
+                GameManager.Instance.HienThongBao("Chào mừng người chơi mới! Hãy mau tạo nhân vật cho mình và bắt đầu cuộc phiêu lưu nào!");
+            }
+            else
+            {
+                SceneManager.LoadScene("Lobby");
+            }
             return;
         }
         accountRepository.CreateGoogleAccount(gmail, sub);
+        SessionManager.Instance.account = accountRepository.findAccountByGmail(gmail);
+        if (charactersRepository.GetCharacterByAccountId(SessionManager.Instance.account.id) == null)
+        {
+            Debug.Log("Heheboi");
+            SceneManager.LoadScene("CreateCharacter");
+            GameManager.Instance.HienThongBao("Chào mừng người chơi mới! Hãy mau tạo nhân vật cho mình và bắt đầu cuộc phiêu lưu nào!");
+        }
     }
     public bool register(string username, string password, string rePassword, string gmail)
     {
@@ -74,7 +114,7 @@ public class AccountService: MonoBehaviour
             return false;
         }
         accountRepository.addAccountToSQL(account);
-        SessionManager.Instance.account = account;
+        SessionManager.Instance.account = accountRepository.findAccountByGmail(gmail);
         return true;
     }
     public bool ChangePassFromResetPass(string NewPassword, string ReNewPassword, string gmail)

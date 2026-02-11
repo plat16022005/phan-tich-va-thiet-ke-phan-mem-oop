@@ -1,3 +1,5 @@
+using Unity.VisualScripting;
+
 public class Characters
 {
     public int id { get; set; }
@@ -13,19 +15,20 @@ public class Characters
     public int speed { get; set; } = 5;
 
     public float crit_rate { get; set; } = 0f;
-    public float rate { get; set; } = 1f;
+    public float crit { get; set; } = 1f;
 
     // Identity
-    public Race race { get; set; }
-    public Class @class { get; set; }   // class là keyword => phải dùng @
+    public TypeRace race { get; set; }
+    public TypeClass @class { get; set; }   // class là keyword => phải dùng @
 
     // Progress
     public int level { get; set; } = 1;
     public int exp { get; set; } = 0;
     public int gold { get; set; } = 0;
+    public int currenthp {get; set;}
 }
 
-public enum Race
+public enum TypeRace
 {
     HUMAN = 0,
     ELF = 1,
@@ -33,7 +36,7 @@ public enum Race
     DEMON = 3,
     ANIMAL= 4
 }
-public enum Class 
+public enum TypeClass 
 {
     Warrior = 0,
     Guardian = 1,

@@ -66,7 +66,6 @@ public class GoogleOAuthListener : MonoBehaviour
         // Debug.Log("🆔 GOOGLE SUB = " + data.sub);
         // Debug.Log("📧 EMAIL = " + data.email);
         AccountService.Instance.loginWithGoogle(data.email, data.sub);
-        SceneManager.LoadScene("CreateCharacter");
     }
 }
 

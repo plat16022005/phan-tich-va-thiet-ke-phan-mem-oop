@@ -2646,7 +2646,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -390.288}
+  m_AnchoredPosition: {x: 0, y: -390.2876}
   m_SizeDelta: {x: 1149.2, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &404230032
@@ -8077,6 +8077,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8ae594a42b445048bab564b5473d3a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  BoxName: {fileID: 991684922}
   hair: {fileID: 2067241940}
   hairOptions:
   - {fileID: 1102313576, guid: 15bc901c3681886478baf28f6be505df, type: 3}
@@ -12915,7 +12916,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -12931,9 +12932,9 @@ MonoBehaviour:
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
-    m_HighlightedSprite: {fileID: 0}
-    m_PressedSprite: {fileID: 0}
-    m_SelectedSprite: {fileID: 0}
+    m_HighlightedSprite: {fileID: -2025129976, guid: 39cdbd77a9be4eb42bc2cf620aea6b3d, type: 3}
+    m_PressedSprite: {fileID: -855009090, guid: 39cdbd77a9be4eb42bc2cf620aea6b3d, type: 3}
+    m_SelectedSprite: {fileID: -1320718650, guid: 39cdbd77a9be4eb42bc2cf620aea6b3d, type: 3}
     m_DisabledSprite: {fileID: 0}
   m_AnimationTriggers:
     m_NormalTrigger: Normal
@@ -12945,7 +12946,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1904292792}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1166612012}
+        m_TargetAssemblyTypeName: AvatarController, Assembly-CSharp
+        m_MethodName: CreateNewCharacter
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1904292792
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -24,14 +24,7 @@ public class AccountController : MonoBehaviour
 
     public void onClickLogin()
     {
-        if (AccountService.Instance.login(username_login.text, password_login.text))
-        {
-            SceneManager.LoadScene("CreateCharacter");
-        }
-        else
-        {
-            Debug.Log("Sai tài khoản");
-        }
+        AccountService.Instance.login(username_login.text, password_login.text);
     }
     public void onClickRegister()
     {
