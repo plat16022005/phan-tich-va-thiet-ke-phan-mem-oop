@@ -11,4 +11,5 @@ public interface CharactersRepository
     public Equipment GetEquipmentByCharacterId(int character_id);
     public void CreateAvatar(Avatar avatar);
     public Avatar GetAvatarByCharacterId(int character_id);
+    public Characters GetCharacterById(int characterId);
 }

@@ -189,10 +189,10 @@ public class CharactersRepositoryImpl : CharactersRepository
                     return new Equipment
                     {
                         character_id = reader.GetInt32("character_id"),
-                        weapon_id = reader["weapon_id"] as int?,
-                        armor_id = reader["armor_id"] as int?,
-                        boots_id = reader["boots_id"] as int?,
-                        pants_id = reader["pants_id"] as int?
+                        weapon_id = reader.GetInt32("weapon_id"),
+                        armor_id = reader.GetInt32("armor_id"),
+                        boots_id = reader.GetInt32("boots_id"),
+                        pants_id = reader.GetInt32("pants_id")
                     };
                 }
             }
@@ -261,5 +261,45 @@ public class CharactersRepositoryImpl : CharactersRepository
         }
         return null;
     }
+    public Characters GetCharacterById(int characterId)
+    {
+        using (MySqlConnection conn = new MySqlConnection(ConnectSQL.connectionString))
+        {
+            conn.Open();
+            string sql = "SELECT * FROM Characters WHERE id = @characterId";
+            MySqlCommand cmd = new MySqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue("@characterId", characterId);
+            using (MySqlDataReader reader = cmd.ExecuteReader())
+            {
+                if (reader.Read())
+                {
+                    Characters character = new Characters();
 
+                    character.id = reader.GetInt32("id");
+                    character.account_id = reader.GetInt32("account_id");
+                    character.nickname = reader.GetString("nickname");
+
+                    character.hp = reader.GetInt32("hp");
+                    character.mana = reader.GetInt32("mana");
+                    character.atk = reader.GetInt32("atk");
+                    character.def = reader.GetInt32("def");
+                    character.speed = reader.GetInt32("speed");
+
+                    character.crit_rate = reader.GetFloat("crit_rate");
+                    character.crit = reader.GetFloat("crit");
+
+                    character.race = (TypeRace)reader.GetInt32("race");
+                    character.@class = (TypeClass)reader.GetInt32("class");
+
+                    character.level = reader.GetInt32("level");
+                    character.exp = reader.GetInt32("exp");
+                    character.gold = reader.GetInt32("gold");
+                    character.currenthp = reader.GetInt32("currenthp");
+
+                    return character;
+                }                
+            }
+        }
+        return null;
+    }
 }
