@@ -743,6 +743,30 @@ public class LobbyManager : MonoBehaviour
         }
         return "127.0.0.1";
     }
+    public async void JoinQuickRoom()
+    {
+        try
+        {
+            QuickJoinLobbyOptions options = new QuickJoinLobbyOptions
+            {
+                Player = GetPlayer()
+            };
 
+            currentLobby = await LobbyService.Instance.QuickJoinLobbyAsync(options);
+
+            try
+            {
+                EnterRoom();
+            }
+            catch
+            {
+                await LobbyService.Instance.RemovePlayerAsync(currentLobby.Id, playerId);
+            }
+        }
+        catch (LobbyServiceException e)
+        {
+            Debug.Log($"QuickJoin failed: {e.Reason}");
+        }
+    }
 
 }

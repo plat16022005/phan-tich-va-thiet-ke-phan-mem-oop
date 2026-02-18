@@ -4,5 +4,11 @@ using UnityEngine;
 
 public class ConnectSQL
 {
-    public static string connectionString = "Server=localhost;Database=gamedata;Uid=root;Pwd=@Tuan16022005;";
+    public static string connectionString =
+        "Server=interchange.proxy.rlwy.net;" +
+        "Port=58245;" +
+        "Database=railway;" +
+        "Uid=root;" +
+        "Pwd=pahjhyGNgOrGXfvcnPmeDoDzwxYmYFul;" +
+        "SslMode=Required;";
 }

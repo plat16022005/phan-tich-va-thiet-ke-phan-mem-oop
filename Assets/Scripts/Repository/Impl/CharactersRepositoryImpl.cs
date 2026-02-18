@@ -10,7 +10,7 @@ public class CharactersRepositoryImpl : CharactersRepository
         using (MySqlConnection conn = new MySqlConnection(ConnectSQL.connectionString))
         {
             conn.Open();
-            string sql = "SELECT nickname FROM Characters WHERE nickname = @name";
+            string sql = "SELECT nickname FROM characters WHERE nickname = @name";
             MySqlCommand cmd = new MySqlCommand(sql, conn);
             cmd.Parameters.AddWithValue("@name", name);
 
@@ -30,7 +30,7 @@ public class CharactersRepositoryImpl : CharactersRepository
         {
             connection.Open();
 
-            string sql = "SELECT * FROM Characters WHERE account_id = @account_id LIMIT 1";
+            string sql = "SELECT * FROM characters WHERE account_id = @account_id LIMIT 1";
             MySqlCommand cmd = new MySqlCommand(sql, connection);
             cmd.Parameters.AddWithValue("@account_id", account_id);
 
@@ -75,7 +75,7 @@ public class CharactersRepositoryImpl : CharactersRepository
             conn.Open();
 
             string sql = @"
-            INSERT INTO Characters
+            INSERT INTO characters
             (
                 account_id,
                 nickname,
@@ -144,7 +144,7 @@ public class CharactersRepositoryImpl : CharactersRepository
             conn.Open();
 
             string sql = @"
-            INSERT INTO Equipment
+            INSERT INTO equipment
             (
                 character_id,
                 weapon_id,
@@ -178,7 +178,7 @@ public class CharactersRepositoryImpl : CharactersRepository
         {
             conn.Open();
 
-            string sql = "SELECT * FROM Equipment WHERE character_id = @character_id";
+            string sql = "SELECT * FROM equipment WHERE character_id = @character_id";
             MySqlCommand cmd = new MySqlCommand(sql, conn);
             cmd.Parameters.AddWithValue("@character_id", character_id);
 
@@ -206,7 +206,7 @@ public class CharactersRepositoryImpl : CharactersRepository
             conn.Open();
 
             string sql = @"
-            INSERT INTO Avatar
+            INSERT INTO avatar
             (
                 character_id,
                 hair,
@@ -240,7 +240,7 @@ public class CharactersRepositoryImpl : CharactersRepository
         {
             conn.Open();
 
-            string sql = "SELECT * FROM Avatar WHERE character_id = @character_id";
+            string sql = "SELECT * FROM avatar WHERE character_id = @character_id";
             MySqlCommand cmd = new MySqlCommand(sql, conn);
             cmd.Parameters.AddWithValue("@character_id", character_id);
 
@@ -266,7 +266,7 @@ public class CharactersRepositoryImpl : CharactersRepository
         using (MySqlConnection conn = new MySqlConnection(ConnectSQL.connectionString))
         {
             conn.Open();
-            string sql = "SELECT * FROM Characters WHERE id = @characterId";
+            string sql = "SELECT * FROM characters WHERE id = @characterId";
             MySqlCommand cmd = new MySqlCommand(sql, conn);
             cmd.Parameters.AddWithValue("@characterId", characterId);
             using (MySqlDataReader reader = cmd.ExecuteReader())

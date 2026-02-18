@@ -13,7 +13,7 @@ public class AccountRepositoryImpl : AccountRepository
         using (MySqlConnection connection = new MySqlConnection(ConnectSQL.connectionString))
         {
             connection.Open();
-            string sql = "SELECT * FROM Account WHERE username = @username";
+            string sql = "SELECT * FROM account WHERE username = @username";
             MySqlCommand cmd = new MySqlCommand(sql, connection);
             cmd.Parameters.AddWithValue("@username", username);
             using (MySqlDataReader reader = cmd.ExecuteReader())
@@ -50,7 +50,7 @@ public class AccountRepositoryImpl : AccountRepository
         using (MySqlConnection connection = new MySqlConnection(ConnectSQL.connectionString))
         {
             connection.Open();
-            string sql = "SELECT * FROM Account WHERE gmail = @gmail";
+            string sql = "SELECT * FROM account WHERE gmail = @gmail";
             MySqlCommand cmd = new MySqlCommand(sql, connection);
             cmd.Parameters.AddWithValue("@gmail", gmail);
             using (MySqlDataReader reader = cmd.ExecuteReader())
@@ -87,7 +87,7 @@ public class AccountRepositoryImpl : AccountRepository
         using (MySqlConnection connection = new MySqlConnection(ConnectSQL.connectionString))
         {
             connection.Open();
-            string sql = "SELECT * FROM Account WHERE sub = @sub";
+            string sql = "SELECT * FROM account WHERE sub = @sub";
             MySqlCommand cmd = new MySqlCommand(sql, connection);
             cmd.Parameters.AddWithValue("@sub", sub);
             using (MySqlDataReader reader = cmd.ExecuteReader())
@@ -123,7 +123,7 @@ public class AccountRepositoryImpl : AccountRepository
         using (MySqlConnection connection = new MySqlConnection(ConnectSQL.connectionString))
         {
             connection.Open();
-            string sql = "INSERT INTO Account(username, password, gmail, logintype, sub) VALUES (@username, @password, @gmail, @logintype, @sub)";
+            string sql = "INSERT INTO account(username, password, gmail, logintype, sub) VALUES (@username, @password, @gmail, @logintype, @sub)";
             MySqlCommand cmd = new MySqlCommand(sql, connection);
             cmd.Parameters.AddWithValue("@username", account.username);
             cmd.Parameters.AddWithValue("@password", account.password);
@@ -171,7 +171,7 @@ public class AccountRepositoryImpl : AccountRepository
             conn.Open();
 
             var cmd = new MySqlCommand(@"
-                UPDATE Account
+                UPDATE account
                 SET sub = @sub,
                     logintype = 'LOCAL_GOOGLE'
                 WHERE id = @id", conn);
@@ -186,7 +186,7 @@ public class AccountRepositoryImpl : AccountRepository
         using(MySqlConnection conn = new MySqlConnection(ConnectSQL.connectionString))
         {
             conn.Open();
-            var cmd = new MySqlCommand(@"UPDATE Account SET password = @newpass WHERE id = @account_id", conn);
+            var cmd = new MySqlCommand(@"UPDATE account SET password = @newpass WHERE id = @account_id", conn);
             cmd.Parameters.AddWithValue("@newpass", newpass);
             cmd.Parameters.AddWithValue("@account_id", account_id);
             cmd.ExecuteNonQuery();
