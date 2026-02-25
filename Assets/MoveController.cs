@@ -6,42 +6,79 @@ using UnityEngine.SceneManagement;
 
 public class MoveController : NetworkBehaviour
 {
-    public float moveSpeed = 5f;
-    public Rigidbody2D rb;
-    public Vector2 vt;
-    // Start is called before the first frame update
-    void Start()
+    // [SerializeField] private GameObject spawnedObjectPrefab;
+    private NetworkVariable<MyCustomData> randomNumber = new NetworkVariable<MyCustomData>(new MyCustomData
     {
-        
+        _int = 56, _bool = true, message = ""
+    }, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+    public override void OnNetworkSpawn()
+    {
+        randomNumber.OnValueChanged += (MyCustomData previousValue, MyCustomData newValue) =>
+        {
+            Debug.Log(OwnerClientId + "; " + newValue._int + "; " + newValue._bool + "; " + newValue.message);
+        }; 
+    }
+    public struct MyCustomData: INetworkSerializable
+    {
+        public int _int;
+        public bool _bool;
+        public string message;
+
+        public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
+        {
+            serializer.SerializeValue(ref _int);
+            serializer.SerializeValue(ref _bool);
+            serializer.SerializeValue(ref message);
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
         if (!IsOwner) return;
-        InputControl();
-        // if (Input.GetKeyDown(KeyCode.K))
+        // if (Input.GetKeyDown(KeyCode.T))
         // {
-        //     NetworkManager.Singleton.SceneManager.LoadScene("SceneNew", UnityEngine.SceneManagement.LoadSceneMode.Single);
-        //     // hoặc SceneManager.LoadScene(1);
+        //     Transform spawnedGameObjectTransfrom = Instantiate(spawnedObjectPrefab.transform);
+        //     spawnedGameObjectTransfrom.GetComponent<NetworkObject>().Spawn(true);
+        //     // TestServerRpc(new ServerRpcParams());
+        //     // TestClientRpc(new ClientRpcParams{Send = new ClientRpcSendParams
+        //     // {
+        //     //     TargetClientIds = new List<ulong> {1}
+        //     // }});
+        //     // randomNumber.Value = new MyCustomData
+        //     // {
+        //     //     _int = Random.Range(0,100),
+        //     //     _bool = false,
+        //     //     message = "Phạm Lê Anh Tuấn"
+        //     // };
         // }
-        // if (Input.GetKeyDown(KeyCode.L))
-        // {
-        //     NetworkManager.Singleton.SceneManager.LoadScene("Test", UnityEngine.SceneManagement.LoadSceneMode.Single);
-        // }
+        Vector3 moveDir = new Vector3(0,0,0);
+        if (Input.GetKey(KeyCode.W))
+        {
+            moveDir.y = 1f;
+        }
+        if (Input.GetKey(KeyCode.S))
+        {
+            moveDir.y = -1f;
+        }
+        if (Input.GetKey(KeyCode.A))
+        {
+            moveDir.x = -1f;
+        }
+        if (Input.GetKey(KeyCode.D))
+        {
+            moveDir.x = 1f;
+        }
+        float moveSpeed = 3f;
+        transform.position += moveDir * moveSpeed * Time.deltaTime;
     }
-    void FixedUpdate()
+    [ServerRpc]
+    private void TestServerRpc(ServerRpcParams serverRpcParams)
     {
-        Move();
+        Debug.Log($"Test ServerRPC: {OwnerClientId}; {serverRpcParams.Receive.SenderClientId}");
     }
-    private void InputControl()
+    [ClientRpc]
+    private void TestClientRpc(ClientRpcParams clientRpcParams)
     {
-        float moveX = Input.GetAxisRaw("Horizontal");
-        float moveY = Input.GetAxisRaw("Vertical");
-        vt = new Vector2(moveX, moveY).normalized;
-    }
-    private void Move()
-    {
-        rb.velocity = vt * moveSpeed;
+        Debug.Log($"Test ClientRPC: {clientRpcParams.Send.TargetClientIds}");
     }
 }

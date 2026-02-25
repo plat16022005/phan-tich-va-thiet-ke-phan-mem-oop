@@ -64,22 +64,9 @@ public class LobbyManager : MonoBehaviour
         equipment = charactersRepository.GetEquipmentByCharacterId(characters.id);
         // Tạo option với profile name khác nhau
         // Nếu bạn muốn test nhiều bản build, hãy truyền profile name qua command line hoặc UI
-        InitializationOptions options = new InitializationOptions();
-        
-        #if !UNITY_EDITOR
-            // Ví dụ: Tạo profile ngẫu nhiên cho mỗi lần mở bản build để tránh trùng
-            options.SetProfile("Player_" + UnityEngine.Random.Range(0, 10000).ToString());
-        #endif
+        await RelayManager.Instance.InitializeServices();
 
-        await UnityServices.InitializeAsync(options); // Truyền options vào đây
-
-        AuthenticationService.Instance.SignedIn += () =>
-        {
-            playerId = AuthenticationService.Instance.PlayerId;
-            Debug.Log("Player Id: " + playerId);
-        };
-        
-        await AuthenticationService.Instance.SignInAnonymouslyAsync();
+        playerId = AuthenticationService.Instance.PlayerId;
 
         NamePlayer.text = characters.nickname;
     }
@@ -227,6 +214,7 @@ public class LobbyManager : MonoBehaviour
                 btnKick.gameObject.SetActive(true);   
             }            
         }
+        StartGameButton.onClick.RemoveAllListeners();
         if (IsHost())
         {
             StartGameButton.onClick.AddListener(StartGame);
@@ -242,7 +230,7 @@ public class LobbyManager : MonoBehaviour
             }
             else
             {
-                StartGameButton.onClick.RemoveAllListeners();
+                
                 StartGameButton.gameObject.SetActive(false);
             }
         }
@@ -510,78 +498,6 @@ public class LobbyManager : MonoBehaviour
             Debug.Log(e);
         }        
     }
-    private float playerPingTimer = 5f;
-
-    // private async void UpdatePlayerHeartbeat()
-    // {
-    //     if (currentLobby == null) return;
-    //     if (string.IsNullOrEmpty(playerId)) return;
-
-    //     playerPingTimer -= Time.deltaTime;
-    //     if (playerPingTimer > 0) return;
-
-    //     playerPingTimer = 5f;
-
-    //     try
-    //     {
-    //         await LobbyService.Instance.UpdatePlayerAsync(
-    //             currentLobby.Id,
-    //             playerId,
-    //             new UpdatePlayerOptions
-    //             {
-    //                 Data = new Dictionary<string, PlayerDataObject>
-    //                 {
-    //                     {
-    //                         "lastSeen",
-    //                         new PlayerDataObject(
-    //                             PlayerDataObject.VisibilityOptions.Member,
-    //                             DateTime.UtcNow.Ticks.ToString()
-    //                         )
-    //                     }
-    //                 }
-    //             }
-    //         );
-    //     }
-    //     catch (LobbyServiceException e)
-    //     {
-    //         if (e.Reason == LobbyExceptionReason.RateLimited)
-    //         {
-    //             playerPingTimer = 8f; // tự giảm nhịp nếu bị spam limit
-    //         }
-    //     }
-    // }
-
-    // private float checkGhostTimer = 3f;
-
-    // private async void CheckGhostPlayers()
-    // {
-    //     if (currentLobby == null) return;
-    //     if (!IsHost()) return;
-
-    //     checkGhostTimer -= Time.deltaTime;
-    //     if (checkGhostTimer <= 0)
-    //     {
-    //         checkGhostTimer = 3f;
-
-    //         var now = DateTime.UtcNow;
-
-    //         foreach (var player in currentLobby.Players)
-    //         {
-    //             if (player.Id == playerId) continue;
-
-    //             if (player.Data.TryGetValue("lastSeen", out var data))
-    //             {
-    //                 var lastSeenTicks = long.Parse(data.Value);
-    //                 var lastSeen = new DateTime(lastSeenTicks);
-
-    //                 if ((now - lastSeen).TotalSeconds > 5)
-    //                 {
-    //                     await LobbyService.Instance.RemovePlayerAsync(currentLobby.Id, player.Id);
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
     private float pollTimer = 8f;
 
     private async void PollLobby()
@@ -658,26 +574,20 @@ public class LobbyManager : MonoBehaviour
     }
     private async void StartGame()
     {
-        if (currentLobby != null && IsHost())
+        if (IsHost())
         {
-            try
-            {
-                UpdateLobbyOptions updateLobbyOptions = new UpdateLobbyOptions
-                {
-                    Data = new Dictionary<string, DataObject>
-                    {
-                        {"IsGameStarted", new DataObject(DataObject.VisibilityOptions.Member, "true")}
-                    }
-                };
-                currentLobby = await LobbyService.Instance.UpdateLobbyAsync(currentLobby.Id, updateLobbyOptions);
-                EnterGame();
-            }
-            catch (LobbyServiceException e)
-            {
-                Debug.Log(e);
-            }
-        }
+            string joinCode = await RelayManager.Instance.CreateRelay();
+            
+            UpdateLobbyOptions updateLobbyOptions = new UpdateLobbyOptions {
+                Data = new Dictionary<string, DataObject> {
+                    { "IsGameStarted", new DataObject(DataObject.VisibilityOptions.Member, "true") },
+                    { "RelayCode", new DataObject(DataObject.VisibilityOptions.Member, joinCode) }
+                }
+            };
+            await LobbyService.Instance.UpdateLobbyAsync(currentLobby.Id, updateLobbyOptions);
 
+            NetworkManager.Singleton.SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
+        }
     }
     private bool IsGameStarted()
     {
@@ -690,58 +600,9 @@ public class LobbyManager : MonoBehaviour
         }
         return false;
     }
-    private async void EnterGame()
+    private void EnterGame()
     {
-        if (IsHost())
-        {
-            ushort port = (ushort)UnityEngine.Random.Range(10000, 60000);
-
-            var transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
-
-            string hostIP = GetLocalIPAddress();
-
-            transport.SetConnectionData(hostIP, port);
-
-            await LobbyService.Instance.UpdateLobbyAsync(
-                currentLobby.Id,
-                new UpdateLobbyOptions
-                {
-                    Data = new Dictionary<string, DataObject>
-                    {
-                        { "port", new DataObject(DataObject.VisibilityOptions.Member, port.ToString()) },
-                        { "ip", new DataObject(DataObject.VisibilityOptions.Member, hostIP) }
-                    }
-                });
-
-            NetworkManager.Singleton.StartHost();
-
-            NetworkManager.Singleton.SceneManager.LoadScene(
-                "GameScene",
-                LoadSceneMode.Single
-            );
-        }
-        else
-        {
-            string hostIP = currentLobby.Data["ip"].Value;
-            ushort port = ushort.Parse(currentLobby.Data["port"].Value);
-
-            var transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
-            transport.SetConnectionData(hostIP, port);
-
-            NetworkManager.Singleton.StartClient();
-        }
-    }
-    private string GetLocalIPAddress()
-    {
-        var host = System.Net.Dns.GetHostEntry(System.Net.Dns.GetHostName());
-        foreach (var ip in host.AddressList)
-        {
-            if (ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
-            {
-                return ip.ToString();
-            }
-        }
-        return "127.0.0.1";
+        RelayManager.Instance.JoinRelay(currentLobby.Data["RelayCode"].Value);
     }
     public async void JoinQuickRoom()
     {
