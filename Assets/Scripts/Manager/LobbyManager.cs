@@ -52,9 +52,6 @@ public class LobbyManager : MonoBehaviour
     private Avatar avatar = new Avatar();
     private Lobby currentLobby;
     private bool isLeavingLobby = false;
-    private bool isQuitting = false;
-
-
     private string playerId;
     // Start is called before the first frame update
     async void Start()
@@ -245,58 +242,6 @@ public class LobbyManager : MonoBehaviour
 
         img.sprite = sprite;
     }
-
-    // private float roomUpdateHandle = 2f;
-    // private async void HandleRoomUpdate()
-    // {
-    //     if (currentLobby == null) return;
-
-    //     roomUpdateHandle -= Time.deltaTime;
-    //     if (roomUpdateHandle > 0) return;
-
-    //     roomUpdateHandle = 2f;
-
-    //     try
-    //     {
-    //         Lobby newLobby = await LobbyService.Instance.GetLobbyAsync(currentLobby.Id);
-
-    //         bool stillInLobby = false;
-
-    //         foreach (Player p in newLobby.Players)
-    //         {
-    //             if (p.Id == playerId)
-    //             {
-    //                 stillInLobby = true;
-    //                 break;
-    //             }
-    //         }
-
-    //         if (!stillInLobby && !isLeavingLobby)
-    //         {
-    //             GameManager.Instance.HienThongBao("Bạn đã bị Host kick!");
-    //             currentLobby = null;
-    //             ExitRoom();
-    //             return;
-    //         }
-
-    //         currentLobby = newLobby;
-    //         VisualizeRoomdetails();
-    //     }
-    //     catch (LobbyServiceException e)
-    //     {
-    //         if (isQuitting) return;
-
-    //         Debug.Log("Lobby closed or host left: " + e.Message);
-
-    //         if (!isLeavingLobby)
-    //         {
-    //             GameManager.Instance.HienThongBao("Phòng đã đóng hoặc bạn đã bị kick!");
-    //         }
-
-    //         currentLobby = null;
-    //         ExitRoom();
-    //     }
-    // }
 
     public async Task DeleteLobby()
     {
@@ -576,8 +521,9 @@ public class LobbyManager : MonoBehaviour
     {
         if (IsHost())
         {
-            string joinCode = await RelayManager.Instance.CreateRelay();
             
+            string joinCode = await RelayManager.Instance.CreateRelay();
+            NetworkManager.Singleton.SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
             UpdateLobbyOptions updateLobbyOptions = new UpdateLobbyOptions {
                 Data = new Dictionary<string, DataObject> {
                     { "IsGameStarted", new DataObject(DataObject.VisibilityOptions.Member, "true") },
@@ -585,8 +531,8 @@ public class LobbyManager : MonoBehaviour
                 }
             };
             await LobbyService.Instance.UpdateLobbyAsync(currentLobby.Id, updateLobbyOptions);
-
-            NetworkManager.Singleton.SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
+            
+            
         }
     }
     private bool IsGameStarted()

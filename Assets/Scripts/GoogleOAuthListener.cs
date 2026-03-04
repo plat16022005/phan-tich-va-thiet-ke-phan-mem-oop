@@ -3,11 +3,11 @@ using System.Net;
 using System.Text;
 using System.Collections;
 using UnityEngine.Networking;
-using UnityEngine.SceneManagement;
+using System.IO;
 
 public class GoogleOAuthListener : MonoBehaviour
 {
-    HttpListener listener;
+    private HttpListener listener;
     private AccountService accountService;
 
     async void Start()
@@ -22,21 +22,43 @@ public class GoogleOAuthListener : MonoBehaviour
         var req = ctx.Request;
         var res = ctx.Response;
 
-        string html = "<html><body>Login success! Return to game.</body></html>";
-        byte[] buf = Encoding.UTF8.GetBytes(html);
-        res.OutputStream.Write(buf, 0, buf.Length);
-        res.Close();
+        // 🔥 Đọc file HTML từ StreamingAssets
+        string filePath = Path.Combine(Application.streamingAssetsPath, "success.html");
+
+        string html;
+
+        if (File.Exists(filePath))
+        {
+            html = File.ReadAllText(filePath);
+        }
+        else
+        {
+            html = "<html><body>Login success! Return to game.</body></html>";
+            Debug.LogWarning("⚠ success.html not found! Using fallback HTML.");
+        }
+
+        byte[] buffer = Encoding.UTF8.GetBytes(html);
+        res.ContentLength64 = buffer.Length;
+        res.ContentType = "text/html";
+        res.OutputStream.Write(buffer, 0, buffer.Length);
+        res.OutputStream.Close();
 
         string code = req.QueryString["code"];
         Debug.Log("🔥 AUTH CODE = " + code);
-        Debug.Log("Nhận code nè");
 
-        // 🔥 QUAN TRỌNG: ĐÓNG LISTENER TRƯỚC KHI GỌI BACKEND
+        // 🔥 Đóng listener trước khi gọi backend
         listener.Stop();
         listener.Close();
         listener = null;
 
-        StartCoroutine(SendCodeToBackend(code));
+        if (!string.IsNullOrEmpty(code))
+        {
+            StartCoroutine(SendCodeToBackend(code));
+        }
+        else
+        {
+            Debug.LogError("❌ No auth code received!");
+        }
     }
 
     IEnumerator SendCodeToBackend(string code)
@@ -63,17 +85,23 @@ public class GoogleOAuthListener : MonoBehaviour
         GoogleLoginResponse data =
             JsonUtility.FromJson<GoogleLoginResponse>(json);
 
-        // Debug.Log("🆔 GOOGLE SUB = " + data.sub);
-        // Debug.Log("📧 EMAIL = " + data.email);
         AccountService.Instance.loginWithGoogle(data.email, data.sub);
+    }
+
+    private void OnApplicationQuit()
+    {
+        if (listener != null && listener.IsListening)
+        {
+            listener.Stop();
+            listener.Close();
+        }
     }
 }
 
 [System.Serializable]
 public class GoogleLoginResponse
 {
-    public string sub;      // 🔥 THÊM
+    public string sub;
     public string email;
     public string token;
 }
-
