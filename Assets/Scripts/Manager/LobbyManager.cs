@@ -169,8 +169,12 @@ public class LobbyManager : MonoBehaviour
                 .SetText("LV." + otherCharacter.level);
 
             // ===== SPRITES =====
-            SetImage(newPlayerInfo, "Weapon",
-                SpritesManager.Instance.spritesWeapon[(int)otherCharacter.@class]);
+            if ((int)otherCharacter.@class == 1)
+                SetImage(newPlayerInfo, "Weapon",
+                    SpritesManager.Instance.spritesWeaponRight[(int)otherCharacter.@class]);
+            else
+                SetImage(newPlayerInfo, "Weapon",
+                    SpritesManager.Instance.spritesWeaponLeft[(int)otherCharacter.@class]);
 
             SetImage(newPlayerInfo, "Head",
                 SpritesManager.Instance.spritesHead[(int)otherCharacter.race]);

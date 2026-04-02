@@ -5,10 +5,10 @@ using UnityEngine;
 public class ConnectSQL
 {
     public static string connectionString =
-        "Server=interchange.proxy.rlwy.net;" +
-        "Port=58245;" +
+        "Server=gondola.proxy.rlwy.net;" +
+        "Port=11375;" +
         "Database=railway;" +
         "Uid=root;" +
-        "Pwd=pahjhyGNgOrGXfvcnPmeDoDzwxYmYFul;" +
+        "Pwd=NdjXmZHIwoNuNcsdQlhcAadFwRRaGOxn;" +
         "SslMode=Required;";
 }

@@ -25,7 +25,8 @@ public class SpritesManager : MonoBehaviour
     public Sprite[] spritesDuiPhai;
     public Sprite[] spritesChanPhai;
     public Sprite[] spritesBanChanPhai;
-    public Sprite[] spritesWeapon;
+    public Sprite[] spritesWeaponLeft;
+    public Sprite[] spritesWeaponRight;
     // Start is called before the first frame update
     void Awake()
     {

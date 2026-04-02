@@ -1715,11 +1715,35 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
-        m_CallState: 2
+        m_CallState: 0
       - m_Target: {fileID: 1118141240}
         m_TargetAssemblyTypeName: PlaySound, Assembly-CSharp
         m_MethodName: ClickButton
         m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 643105820}
+        m_TargetAssemblyTypeName: LoginUI, Assembly-CSharp
+        m_MethodName: SelectAccountLogin
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 643105820}
+        m_TargetAssemblyTypeName: LoginUI, Assembly-CSharp
+        m_MethodName: OnLoginButton
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -2867,14 +2891,22 @@ MonoBehaviour:
   spritesBanChanPhai:
   - {fileID: 0}
   - {fileID: 21300000, guid: 734d306a3d3a1024fb4b8b370c97c239, type: 3}
-  spritesWeapon:
-  - {fileID: 21300000, guid: 92d5ce998cc8d434aa3abc0057ccb3ea, type: 3}
-  - {fileID: 21300000, guid: 3cdb1559fd5f102428641a257e4bb7d6, type: 3}
-  - {fileID: 21300000, guid: e4c5c4a362eb6bb4ba823adb3581e56e, type: 3}
-  - {fileID: 21300000, guid: 71178b77dcb22e847bdb9a1d7692b962, type: 3}
-  - {fileID: 21300000, guid: fa913908dac48b349aa6ee3e310513dd, type: 3}
-  - {fileID: 21300000, guid: 5167d69025ad6344493e849646da0a60, type: 3}
-  - {fileID: 21300000, guid: 6dd9e2c0633b4b440a2c607766eaf1c3, type: 3}
+  spritesWeaponLeft:
+  - {fileID: 21300000, guid: 29d51881ccd90ca46b5bae2a9e2a6252, type: 3}
+  - {fileID: 0}
+  - {fileID: 21300000, guid: f030bc684dc86d74991aa1b463da89cd, type: 3}
+  - {fileID: 21300000, guid: 034d1b8c2e3f80f4c95fbebba2944eee, type: 3}
+  - {fileID: 21300000, guid: edb98bc63641efb43985ef47c2832d6e, type: 3}
+  - {fileID: 21300000, guid: 0ecbdb56caea65c4e88ddd976286fc88, type: 3}
+  - {fileID: 21300000, guid: ff9567e92ef40444bab484c0f9cde9e0, type: 3}
+  spritesWeaponRight:
+  - {fileID: 0}
+  - {fileID: 21300000, guid: d9a6ecf470b8dfe4bba2b8f3a9d94222, type: 3}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 21300000, guid: edb98bc63641efb43985ef47c2832d6e, type: 3}
+  - {fileID: 0}
+  - {fileID: 21300000, guid: ff9567e92ef40444bab484c0f9cde9e0, type: 3}
 --- !u!1 &561731456
 GameObject:
   m_ObjectHideFlags: 0
@@ -3273,11 +3305,35 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
-        m_CallState: 2
+        m_CallState: 0
       - m_Target: {fileID: 1118141240}
         m_TargetAssemblyTypeName: PlaySound, Assembly-CSharp
         m_MethodName: ClickButton
         m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 643105820}
+        m_TargetAssemblyTypeName: LoginUI, Assembly-CSharp
+        m_MethodName: SelectGoogleLogin
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 643105820}
+        m_TargetAssemblyTypeName: LoginUI, Assembly-CSharp
+        m_MethodName: OnLoginButton
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -3351,6 +3407,7 @@ GameObject:
   - component: {fileID: 643105817}
   - component: {fileID: 643105818}
   - component: {fileID: 643105819}
+  - component: {fileID: 643105820}
   m_Layer: 5
   m_Name: PanelDangNhap
   m_TagString: Untagged
@@ -3477,6 +3534,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbb24a1df56194d4a8ebb38d85db73e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &643105820
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 643105812}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ad29b7590f842c42a9b89089da769a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  usernameInput: {fileID: 1250994448}
+  passwordInput: {fileID: 89592495}
 --- !u!1 &643348491
 GameObject:
   m_ObjectHideFlags: 0
@@ -4364,6 +4435,7 @@ GameObject:
   - component: {fileID: 843538486}
   - component: {fileID: 843538488}
   - component: {fileID: 843538487}
+  - component: {fileID: 843538489}
   m_Layer: 0
   m_Name: GameService
   m_TagString: Untagged
@@ -4432,6 +4504,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 38645b644d902c04cb801335935f0085, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &843538489
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 843538483}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79db749847dcfa34d8b7ae3bfaea7af0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &848017246

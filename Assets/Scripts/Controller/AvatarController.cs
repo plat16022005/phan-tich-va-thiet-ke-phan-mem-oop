@@ -57,8 +57,17 @@ public class AvatarController : MonoBehaviour
     void Start()
     {
         UpdateAll();
+        BoxName.onValidateInput += SetNameValidate;
     }
+    char SetNameValidate(string text, int charIndex, char addedChar)
+    {
+        if (char.IsLetterOrDigit(addedChar))
+        {
+            return addedChar;
+        }
 
+        return '\0';
+    }
     public void NextHair()
     {
         hairIndex = (hairIndex + 1) % hairOptions.Length;

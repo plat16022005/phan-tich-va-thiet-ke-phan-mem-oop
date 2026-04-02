@@ -6,6 +6,19 @@ using UnityEngine.SceneManagement;
 
 public class MoveController : NetworkBehaviour
 {
+    public Animator animator;
+    public float speed = 5f;
+    public float jumpForce = 2f;
+
+    private Vector3 velocity;
+    private bool isGrounded;
+    [SerializeField] private Rigidbody2D rb;
+
+    public Transform groundCheck;
+    public float groundDistance = 0.3f;
+    public LayerMask groundMask;
+    public float attackCooldown = 0.5f;
+    private float lastAttackTime;
     // [SerializeField] private GameObject spawnedObjectPrefab;
     private NetworkVariable<MyCustomData> randomNumber = new NetworkVariable<MyCustomData>(new MyCustomData
     {
@@ -32,44 +45,54 @@ public class MoveController : NetworkBehaviour
         }
     }
 
-    private void Update()
+    void Update()
     {
         if (!IsOwner) return;
-        // if (Input.GetKeyDown(KeyCode.T))
-        // {
-        //     Transform spawnedGameObjectTransfrom = Instantiate(spawnedObjectPrefab.transform);
-        //     spawnedGameObjectTransfrom.GetComponent<NetworkObject>().Spawn(true);
-        //     // TestServerRpc(new ServerRpcParams());
-        //     // TestClientRpc(new ClientRpcParams{Send = new ClientRpcSendParams
-        //     // {
-        //     //     TargetClientIds = new List<ulong> {1}
-        //     // }});
-        //     // randomNumber.Value = new MyCustomData
-        //     // {
-        //     //     _int = Random.Range(0,100),
-        //     //     _bool = false,
-        //     //     message = "Phạm Lê Anh Tuấn"
-        //     // };
-        // }
-        Vector3 moveDir = new Vector3(0,0,0);
-        if (Input.GetKey(KeyCode.W))
+
+        UpdateControll();
+        UpdateAnimator();
+    }
+    void UpdateAnimator()
+    {
+        animator.SetFloat("velocityY", rb.velocity.y);
+        animator.SetBool("grounded", isGrounded);
+        if (rb.velocity.x != 0)
+            animator.SetBool("isRunning", true);
+        else
+            animator.SetBool("isRunning", false);
+        animator.SetInteger("class", 0);
+        if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            moveDir.y = 1f;
+            if (Time.time >= lastAttackTime + attackCooldown)
+            {
+                animator.SetTrigger("attack");
+                lastAttackTime = Time.time;
+            }
         }
-        if (Input.GetKey(KeyCode.S))
+    }
+    void UpdateControll()
+    {
+        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundDistance, groundMask);
+
+        float x = Input.GetAxis("Horizontal");
+
+        Vector2 velocity = rb.velocity;
+        velocity.x = x * speed;
+        rb.velocity = velocity;
+
+        Vector3 scale = transform.localScale;
+
+        if (x > 0)
+            scale.x = Mathf.Abs(scale.x);
+        else if (x < 0)
+            scale.x = -Mathf.Abs(scale.x);
+
+        transform.localScale = scale;
+
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
-            moveDir.y = -1f;
+            rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
         }
-        if (Input.GetKey(KeyCode.A))
-        {
-            moveDir.x = -1f;
-        }
-        if (Input.GetKey(KeyCode.D))
-        {
-            moveDir.x = 1f;
-        }
-        float moveSpeed = 3f;
-        transform.position += moveDir * moveSpeed * Time.deltaTime;
     }
     [ServerRpc]
     private void TestServerRpc(ServerRpcParams serverRpcParams)
@@ -80,5 +103,17 @@ public class MoveController : NetworkBehaviour
     private void TestClientRpc(ClientRpcParams clientRpcParams)
     {
         Debug.Log($"Test ClientRPC: {clientRpcParams.Send.TargetClientIds}");
+    }
+    [ServerRpc]
+    void ChangeCustomDataServerRpc()
+    {
+        CustomData data = new CustomData();
+
+        data.hair = Random.Range(0, 5);
+        data.eyes = Random.Range(0, 5);
+        data.nose = Random.Range(0, 5);
+        data.mouth = Random.Range(0, 5);
+
+        GetComponentInChildren<CustomNetworkManager>().customData.Value = data;
     }
 }

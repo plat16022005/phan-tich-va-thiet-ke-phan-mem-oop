@@ -8,12 +8,12 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Player
   - Water
   - UI
   - Body
   - Head
-  - 
+  - Ground
   - 
   - 
   - 
@@ -40,4 +40,16 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Background
+    uniqueID: 1143659343
+    locked: 0
+  - name: TrangTri
+    uniqueID: 1100337305
+    locked: 0
+  - name: Player
+    uniqueID: 3893346487
+    locked: 0
+  - name: Ground
+    uniqueID: 1008503613
     locked: 0

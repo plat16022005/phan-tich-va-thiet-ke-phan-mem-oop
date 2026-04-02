@@ -7,11 +7,17 @@ public class YSort : MonoBehaviour
 
     void Awake()
     {
+        if (!CompareTag("Player"))
+        {
+            enabled = false;
+            return;
+        }
+
         sortingGroup = GetComponent<SortingGroup>();
     }
 
     void LateUpdate()
     {
-        sortingGroup.sortingOrder = Mathf.RoundToInt(-transform.position.y * 100);
+        sortingGroup.sortingOrder = -(int)(transform.position.y * 100);
     }
 }
