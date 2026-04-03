@@ -15,9 +15,10 @@ public class DataNetworkService : MonoBehaviour
 
         Instance = this;
     }
-    public CustomData CreateCustomData(int hair, int eyes, int nose, int mouth, int race, int @class)
+    public CustomData CreateCustomData(string name, int hair, int eyes, int nose, int mouth, int race, int @class)
     {
         CustomData data = new CustomData();
+        data.name = name;
         data.hair = hair;
         data.eyes = eyes;
         data.nose = nose;

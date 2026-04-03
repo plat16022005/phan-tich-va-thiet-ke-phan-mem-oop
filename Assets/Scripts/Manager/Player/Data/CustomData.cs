@@ -5,6 +5,7 @@ using UnityEngine;
 
 public struct CustomData : INetworkSerializable
 {
+    public string name;
     public int hair;
     public int eyes;
     public int nose;
@@ -14,6 +15,7 @@ public struct CustomData : INetworkSerializable
     public void NetworkSerialize<T>(BufferSerializer<T> serializer)
         where T : IReaderWriter
     {
+        serializer.SerializeValue(ref name);
         serializer.SerializeValue(ref eyes);
         serializer.SerializeValue(ref nose);
         serializer.SerializeValue(ref mouth);

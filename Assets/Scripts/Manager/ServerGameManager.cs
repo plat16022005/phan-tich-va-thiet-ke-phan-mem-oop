@@ -35,6 +35,7 @@ public class ServerGameManager : MonoBehaviour
         Debug.Log(characters.id);
 
         CustomData data = DataNetworkService.Instance.CreateCustomData(
+            characters.nickname,
             avatar.hair,
             avatar.eyes,
             avatar.nose,

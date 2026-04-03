@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class MoveController : NetworkBehaviour
 {
     public Animator animator;
     public float speed = 5f;
     public float jumpForce = 2f;
-
+    public Transform visual;
     private Vector3 velocity;
     private bool isGrounded;
     [SerializeField] private Rigidbody2D rb;
@@ -80,14 +81,14 @@ public class MoveController : NetworkBehaviour
         velocity.x = x * speed;
         rb.velocity = velocity;
 
-        Vector3 scale = transform.localScale;
+        Vector3 scale = visual.localScale;
 
         if (x > 0)
             scale.x = Mathf.Abs(scale.x);
         else if (x < 0)
             scale.x = -Mathf.Abs(scale.x);
 
-        transform.localScale = scale;
+        visual.localScale = scale;
 
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {

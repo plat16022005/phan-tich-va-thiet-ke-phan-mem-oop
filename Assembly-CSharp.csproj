@@ -72,6 +72,7 @@
     <Compile Include="Assets\Scripts\Controller\UI\PanelController.cs" />
     <Compile Include="Assets\Scripts\Config\ConnectSQL.cs" />
     <Compile Include="Assets\Scripts\Config\SessionManager.cs" />
+    <Compile Include="Assets\Scripts\Model\Weapon.cs" />
     <Compile Include="Assets\GoogleSignIn\Future.cs" />
     <Compile Include="Assets\Scripts\Manager\SpritesManager.cs" />
     <Compile Include="Assets\Scripts\Model\Equipment.cs" />
@@ -87,14 +88,18 @@
     <Compile Include="Assets\Scripts\Model\UI\Panel\PanelResetPass.cs" />
     <Compile Include="Assets\GoogleSignIn\GoogleSignIn.cs" />
     <Compile Include="Assets\Scripts\FactoryMethod\LoginFactory.cs" />
+    <Compile Include="Assets\Scripts\Model\Quest.cs" />
     <Compile Include="Assets\Scripts\Model\Characters.cs" />
     <Compile Include="Assets\Scripts\Manager\GameManager.cs" />
     <Compile Include="Assets\Scripts\Model\UI\Panel\PanelDangNhap.cs" />
+    <Compile Include="Assets\Scripts\Config\EnemySpawner.cs" />
+    <Compile Include="Assets\Scripts\Config\CollectItem.cs" />
     <Compile Include="Assets\GoogleSignIn\GoogleSignInStatusCode.cs" />
     <Compile Include="Assets\Scripts\Config\DontDestroy.cs" />
     <Compile Include="Assets\MoveController.cs" />
     <Compile Include="Assets\GoogleSignIn\GoogleSignInUser.cs" />
     <Compile Include="Assets\GoogleSignIn\GoogleSignInConfiguration.cs" />
+    <Compile Include="Assets\Scripts\Config\PlayerCombat.cs" />
     <Compile Include="Assets\GoogleSignIn\Impl\NativeFuture.cs" />
     <Compile Include="Assets\Scripts\Model\Account.cs" />
     <Compile Include="Assets\Scripts\Config\GetData.cs" />
@@ -122,9 +127,11 @@
     <Compile Include="Assets\Scripts\Repository\Impl\CharactersRepositoryImpl.cs" />
     <Compile Include="Assets\Scripts\Repository\Impl\AccountRepositoryImpl.cs" />
     <Compile Include="Assets\Scripts\Config\Network\ClientNetworkTransform.cs" />
+    <Compile Include="Assets\Scripts\Manager\EnemyUIManager.cs" />
     <Compile Include="Assets\Scripts\Service\DataNetworkService.cs" />
     <Compile Include="Assets\Scripts\Service\AccountService.cs" />
     <Compile Include="Assets\Scripts\Model\UI\Button\ButtonPanel.cs" />
+    <Compile Include="Assets\Scripts\Model\Enemy.cs" />
     <Compile Include="Assets\Scripts\Config\PlaySound.cs" />
   </ItemGroup>
   <ItemGroup>
