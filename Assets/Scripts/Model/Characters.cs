@@ -26,6 +26,13 @@ public class Characters
     public int exp { get; set; } = 0;
     public int gold { get; set; } = 0;
     public int currenthp {get; set;}
+    public void StartQuest(int QuestId)
+    {
+        Quests.instance.Track(QuestId);
+        Quests.instance.UpdateState("Đang thực hiện");
+        string local = Quests.instance.GetLocation(QuestId);
+        UI.instance.DisplayLocation(local);
+    }
 }
 
 public enum TypeRace
