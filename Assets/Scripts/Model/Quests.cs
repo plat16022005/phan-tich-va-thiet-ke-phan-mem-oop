@@ -1,16 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
+using Unity.Netcode;
 using UnityEngine;
 
 public class Quests : MonoBehaviour
 {
+    private GameData GameData = new GameData();
+    public Quests()
+    {
+        
+    }
     public int id;
     public string NameQuest;
     public QuestType TypeQuest;
     private QuestRepository QuestRepository = new QuestRepositoryImpl();
     private QuestContentRepository QuestContentRepository = new QuestContentRepositoryImpl();
-    private int CurrentQuest;
     public static Quests instance;
     private void Awake()
     {
@@ -18,13 +23,13 @@ public class Quests : MonoBehaviour
     }
     public void LoadQuest()
     {
-        List<Quests> ListQuest = QuestRepository.FindAllQuest();
-        UI.instance.DisplayListQuest(ListQuest);
+        List<Quests> ListQuest = GameData.FindAllQuest();
+        GameUI.instance.DisplayListQuest(ListQuest);
     }
     public void ChoiceQuest(int QuestId)
     {
-        QuestContent quest = QuestContentRepository.ViewDetail(QuestId);
-        UI.instance.DisplayQuestInfo(quest);
+        QuestContent quest = GameData.ViewDetail(QuestId);
+        GameUI.instance.DisplayDetailQuest(quest);
     }
     public void Track(int QuestId)
     {
@@ -36,7 +41,25 @@ public class Quests : MonoBehaviour
     }
     public string GetLocation(int QuestId)
     {
-        return QuestManager.instance.GetLocation(QuestId);
+        return QuestManager.instance.location[QuestId];
+    }
+    public int GetReward(int QuestId)
+    {
+        return QuestManager.instance.rewards[QuestId];
+    }
+    public bool CheckConditions(int QuestId)
+    {
+        QuestContent quest = GameData.ViewDetail(QuestId);
+        if (QuestManager.instance.playerProcess[NetworkManager.Singleton.LocalClientId] >= quest.required)
+        {
+            return true;
+        }
+        return false;
+    }
+    public void CancelQuest()
+    {
+        UpdateState("Thất bại");
+        GameUI.instance.DisplayMessage("Bạn đã thất bại");        
     }
 }
 

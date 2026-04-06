@@ -7,17 +7,31 @@ public class QuestManager : MonoBehaviour
     public static QuestManager instance;
     public int CurrentQuest;
     public string State;
-    private Dictionary<int, string> location = new Dictionary<int, string>
+    public Dictionary<int, string> location = new Dictionary<int, string>
     {
         {1, "Vùng đất bằng phẳng"},
         {2, "Tận cùng bản đồ bên trái"}
     };
+    public Dictionary<int, int> rewards = new Dictionary<int, int>
+    {
+        {1, 10},
+        {2, 15}  
+    };
+    public Dictionary<ulong, int> playerProcess = new Dictionary<ulong, int>();
     private void Awake()
     {
         instance = this;
     }
-    public string GetLocation(int id)
+    public void AddProcess(ulong clientId, int amount)
     {
-        return location[id];
+        if (!playerProcess.ContainsKey(clientId))
+            playerProcess[clientId] = 0;
+
+        playerProcess[clientId] += amount;
     }
+
+    // public int GetProcess(ulong clientId)
+    // {
+    //     return playerProcess.ContainsKey(clientId) ? playerProcess[clientId] : 0;
+    // }
 }

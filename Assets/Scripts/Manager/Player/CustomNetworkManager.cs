@@ -1,11 +1,9 @@
-using TMPro;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class CustomNetworkManager : NetworkBehaviour
 {
-    public TextMeshPro NamePlayer;
     public SpriteRenderer head;
     public SpriteRenderer bantaytrai;
     public SpriteRenderer bantayphai;
@@ -76,7 +74,6 @@ public class CustomNetworkManager : NetworkBehaviour
 
     void ApplyCustomData(CustomData customData)
     {
-        NamePlayer.text = customData.name;
         head.sprite = SpritesManager.Instance.spritesHead[customData.race];
         bantaytrai.sprite = SpritesManager.Instance.spritesBanTayTrai[customData.race];
         bantayphai.sprite = SpritesManager.Instance.spritesBanTayPhai[customData.race];
@@ -97,7 +94,6 @@ public class CustomNetworkManager : NetworkBehaviour
         Avatar avatar = repo.GetAvatarByCharacterId(characters.id);
 
         CustomData data = DataNetworkService.Instance.CreateCustomData(
-            characters.nickname,
             avatar.hair,
             avatar.eyes,
             avatar.nose,

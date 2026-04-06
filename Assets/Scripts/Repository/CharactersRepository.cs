@@ -12,4 +12,5 @@ public interface CharactersRepository
     public void CreateAvatar(Avatar avatar);
     public Avatar GetAvatarByCharacterId(int character_id);
     public Characters GetCharacterById(int characterId);
+    void UpdateGold(int gold, int CharactersId);
 }

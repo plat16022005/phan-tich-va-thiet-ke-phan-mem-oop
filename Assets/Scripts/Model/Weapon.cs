@@ -39,7 +39,7 @@ public class Weapon : NetworkBehaviour
             Enemy enemy = obj.GetComponent<Enemy>();
             if (enemy != null)
             {
-                enemy.TakeDamage(damage);
+                enemy.TakeDamageServerRpc(damage, NetworkManager.Singleton.LocalClientId);
 
                 // 🔥 gửi về đúng client vừa đánh
                 UpdateEnemyUIClientRpc(

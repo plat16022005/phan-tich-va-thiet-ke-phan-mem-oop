@@ -1,5 +1,3 @@
-using Unity.VisualScripting;
-
 public class Characters
 {
     public int id { get; set; }
@@ -31,7 +29,23 @@ public class Characters
         Quests.instance.Track(QuestId);
         Quests.instance.UpdateState("Đang thực hiện");
         string local = Quests.instance.GetLocation(QuestId);
-        UI.instance.DisplayLocation(local);
+        GameUI.instance.DisplayLocation(local);
+    }
+    public void ResultQuest(int QuestId)
+    {
+        bool con = Quests.instance.CheckConditions(QuestId);
+        if (con == true)
+        {
+            int rewards = Quests.instance.GetReward(QuestId);
+            Inventory.instance.AddReward(rewards);
+            Quests.instance.UpdateState("Đã hoàn thành");
+            GameUI.instance.DisplayMessage("Chúc mừng bạn đã hoàn thành nhiệm vụ");
+        }
+        else
+        {
+            Quests.instance.UpdateState("Thất bại");
+            GameUI.instance.DisplayMessage("Bạn đã thất bại");
+        }
     }
 }
 

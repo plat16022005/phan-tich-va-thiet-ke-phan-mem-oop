@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UI : MonoBehaviour
+public class GameUI : MonoBehaviour
 {
-    public static UI instance;
+    public static GameUI instance;
     [Header("Quest")]
     public GameObject PanelListQuest;
     public Transform ContentQuest;
@@ -20,10 +21,14 @@ public class UI : MonoBehaviour
     public Button CancelQuest;
     public Button ViewQuest;
     public Button CompleteQuest;
+    public TextMeshProUGUI Process;
     private Characters characters;
     [Header("Location")]
     public GameObject PanelLocation;
     public TextMeshProUGUI Location;
+    [Header("Message")]
+    public GameObject PanelMessage;
+    public TextMeshProUGUI Message;
     private void Awake()
     {
         instance = this;
@@ -39,6 +44,8 @@ public class UI : MonoBehaviour
             PanelQuestInfo.gameObject.SetActive(false);
         else if (typepanel == "Panel Location")
             PanelLocation.gameObject.SetActive(false);
+        else if (typepanel == "Panel Message")
+            PanelMessage.gameObject.SetActive(false);
     }
     public void DisplayListQuest(List<Quests> quests)
     {
@@ -54,7 +61,7 @@ public class UI : MonoBehaviour
             ui.Init(q);
         }
     }
-    public void DisplayQuestInfo(QuestContent q)
+    public void DisplayDetailQuest(QuestContent q)
     {
         ResetPanelQuestInfo();
         PanelQuestInfo.gameObject.SetActive(true);
@@ -67,12 +74,16 @@ public class UI : MonoBehaviour
             ViewQuest.gameObject.SetActive(true);
             if (QuestManager.instance.State == "Đang thực hiện")
             {
+                CompleteQuest.gameObject.SetActive(true);
                 CancelQuest.gameObject.SetActive(true);
+                CompleteQuest.onClick.AddListener(() => characters.ResultQuest(q.id_quest));
+                CancelQuest.onClick.AddListener(Quests.instance.CancelQuest);
+                Process.gameObject.SetActive(true);
+                Process.text = $"{QuestManager.instance.playerProcess[NetworkManager.Singleton.LocalClientId]}/{q.required}";
             }
             else
             {
-                CancelQuest.gameObject.SetActive(false);
-                CompleteQuest.gameObject.SetActive(true);
+                QuestManager.instance.CurrentQuest = 0;
             }
         }
     }
@@ -84,6 +95,7 @@ public class UI : MonoBehaviour
         CancelQuest.gameObject.SetActive(false);
         ViewQuest.gameObject.SetActive(false);
         CompleteQuest.gameObject.SetActive(false);
+        Process.gameObject.SetActive(false);
     }
     public void DisplayLocation(string local)
     {
@@ -91,5 +103,13 @@ public class UI : MonoBehaviour
         PanelListQuest.gameObject.SetActive(false);
         PanelLocation.gameObject.SetActive(true);
         Location.text = local;
+    }
+    public void DisplayMessage(string message)
+    {
+        PanelQuestInfo.gameObject.SetActive(false);
+        PanelListQuest.gameObject.SetActive(false);
+        PanelLocation.gameObject.SetActive(false);
+        PanelMessage.gameObject.SetActive(true);
+        Message.text = message;    
     }
 }

@@ -6,7 +6,7 @@ public class Enemy : NetworkBehaviour
 {
     public string NameEnemy = "Enemy";
     public int maxHealth = 100;
-    public NetworkObject enemyPrefab;
+    public GameObject enemyPrefab;
     private NetworkVariable<int> currentHealth = new NetworkVariable<int>();
 
     public Animator animator;
@@ -34,7 +34,6 @@ public class Enemy : NetworkBehaviour
         if (!IsServer || isDead) return;
 
         Patrol();
-        UpdateAnimator();
     }
 
     void Patrol() 
@@ -49,28 +48,30 @@ public class Enemy : NetworkBehaviour
         } 
     }
 
-    void UpdateAnimator()
-    {
-        animator.SetBool("Running", Mathf.Abs(rb.velocity.x) > 0.1f);
-    }
 
     // ===== Combat =====
-    public void TakeDamage(int damage)
+    [ServerRpc]
+    public void TakeDamageServerRpc(int damage, ulong attackerId)
     {
-        if (!IsServer || isDead) return;
+        if (isDead) return;
 
         currentHealth.Value -= damage;
-        Debug.Log(currentHealth.Value);
-
 
         if (currentHealth.Value <= 0)
         {
-            Die();
+            Die(attackerId); // 🔥 truyền killer
         }
     }
 
-    void Die()
+    void Die(ulong killerId)
     {
+        if (QuestManager.instance.CurrentQuest == 1 
+            && QuestManager.instance.State == "Đang thực hiện" 
+            && NameEnemy == "Slime")
+        {
+            QuestManager.instance.AddProcess(killerId, 1);
+        }
+
         isDead = true;
 
         rb.velocity = Vector2.zero;
@@ -92,8 +93,8 @@ public class Enemy : NetworkBehaviour
         yield return new WaitForSeconds(8f);
 
         // Spawn enemy mới
-        NetworkObject newEnemy = Instantiate(enemyPrefab, startPos, Quaternion.identity);
-        newEnemy.Spawn();
+        GameObject obj = Instantiate(enemyPrefab, startPos, Quaternion.identity);
+        obj.GetComponent<NetworkObject>().Spawn();
 
         // Despawn enemy cũ
         NetworkObject.Despawn();
@@ -102,4 +103,14 @@ public class Enemy : NetworkBehaviour
     {
         return currentHealth.Value;
     }
+    // [ClientRpc]
+    // void UpdateQuestClientRpc(ulong clientId)
+    // {
+    //     // 🎯 chỉ client đúng mới cộng
+    //     if (NetworkManager.Singleton.LocalClientId == clientId)
+    //     {
+    //         QuestManager.instance.process += 1;
+    //         Debug.Log("Client " + clientId + " được cộng quest");
+    //     }
+    // }
 }

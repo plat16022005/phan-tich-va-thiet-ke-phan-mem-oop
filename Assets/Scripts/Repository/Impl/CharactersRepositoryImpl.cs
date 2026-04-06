@@ -302,4 +302,15 @@ public class CharactersRepositoryImpl : CharactersRepository
         }
         return null;
     }
+    public void UpdateGold(int gold, int CharactersId)
+    {
+        using (MySqlConnection connection = new MySqlConnection(ConnectSQL.connectionString))
+        {
+            connection.Open();
+            var cmd = new MySqlCommand("UPDATE characters SET gold = @gold WHERE id = @CharactersId", connection);
+            cmd.Parameters.AddWithValue("@gold", gold);
+            cmd.Parameters.AddWithValue("@CharactersId", CharactersId);
+            cmd.ExecuteNonQuery();
+        }
+    }
 }
