@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using Unity.Netcode;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -29,6 +30,17 @@ public class GameUI : MonoBehaviour
     [Header("Message")]
     public GameObject PanelMessage;
     public TextMeshProUGUI Message;
+    [Header("List Dungeon")]
+    public GameObject PanelListDungeon;
+    public Transform ContentDungeon;
+    public GameObject DungeonPrefabs;
+    [Header("Panel Display Rewards")]
+    public GameObject PanelDisplayRewards;
+    public TextMeshProUGUI Rewards;
+    [Header("Icon")]
+    public Button IconQuest;
+    public Button IconDungeon;
+    public Button LeaveDungeon;
     private void Awake()
     {
         instance = this;
@@ -46,6 +58,12 @@ public class GameUI : MonoBehaviour
             PanelLocation.gameObject.SetActive(false);
         else if (typepanel == "Panel Message")
             PanelMessage.gameObject.SetActive(false);
+        else if (typepanel == "Panel List dungeon")
+        {
+            PanelListDungeon.gameObject.SetActive(false);
+        }  
+        else if (typepanel == "Panel Display Rewards")
+            PanelDisplayRewards.gameObject.SetActive(false);
     }
     public void DisplayListQuest(List<Quests> quests)
     {
@@ -111,5 +129,40 @@ public class GameUI : MonoBehaviour
         PanelLocation.gameObject.SetActive(false);
         PanelMessage.gameObject.SetActive(true);
         Message.text = message;    
+    }
+    public void DisplayListDungeonn(List<Dungeon> ListDungeon)
+    {
+        PanelListDungeon.SetActive(true);
+        foreach (Transform child in ContentDungeon)
+        {
+            Destroy(child.gameObject);
+        }
+        foreach (Dungeon dungeon in ListDungeon)
+        {
+            GameObject obj = Instantiate(DungeonPrefabs, ContentDungeon);
+            DungeonItemUI ui = obj.GetComponent<DungeonItemUI>();
+            ui.Init(dungeon);
+        }
+    }
+    public void EnterDungeon()
+    {
+        IconQuest.gameObject.SetActive(false);
+        IconDungeon.gameObject.SetActive(false);
+        LeaveDungeon.gameObject.SetActive(true);
+    }
+    public void ExitDungeon()
+    {
+        IconQuest.gameObject.SetActive(true);
+        IconDungeon.gameObject.SetActive(true);
+        LeaveDungeon.gameObject.SetActive(false);
+        GameObject player = NetworkManager.Singleton.LocalClient.PlayerObject.gameObject;
+        Vector3 pos = new Vector3(-1.5f, 0.8f, 0.7f);
+        player.transform.position = pos;
+        ClosePanel("Panel Display Rewards");        
+    }
+    public void DisplayRewards(Rewards rewards)
+    {
+        PanelDisplayRewards.gameObject.SetActive(true);
+        Rewards.text = $"{rewards.gold} vàng";
     }
 }

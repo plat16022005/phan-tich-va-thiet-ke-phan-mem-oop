@@ -6,12 +6,11 @@ public class Inventory : MonoBehaviour
 {
     public static Inventory instance;
     private Characters characters;
-    private CharactersRepository CharactersRepository;
+    private GameData GameData = new GameData();
     private void Awake()
     {
         instance = this;
-        CharactersRepository = new CharactersRepositoryImpl();
-        characters = CharactersRepository.GetCharacterByAccountId(SessionManager.Instance.account.id);
+        characters = PlayerManager.instance.characters;
     }
     void Update()
     {
@@ -24,6 +23,6 @@ public class Inventory : MonoBehaviour
     {
         characters.gold += rewards;
         Debug.Log(characters.id);
-        CharactersRepository.UpdateGold(characters.gold, characters.id);
+        GameData.UpdateGold(characters.gold, characters.id);
     }
 }

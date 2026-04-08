@@ -77,6 +77,7 @@
     <Compile Include="Assets\GoogleSignIn\Future.cs" />
     <Compile Include="Assets\Scripts\Manager\SpritesManager.cs" />
     <Compile Include="Assets\Scripts\Model\GameUI.cs" />
+    <Compile Include="Assets\Scripts\Model\UI\DungeonItemUI.cs" />
     <Compile Include="Assets\Scripts\Model\Equipment.cs" />
     <Compile Include="Assets\Scripts\Config\Network\ClientNetworkAnimator.cs" />
     <Compile Include="Assets\GoogleSignIn\Impl\BaseObject.cs" />
@@ -94,6 +95,7 @@
     <Compile Include="Assets\Scripts\Model\Quests.cs" />
     <Compile Include="Assets\Scripts\Manager\GameManager.cs" />
     <Compile Include="Assets\Scripts\Model\UI\Panel\PanelDangNhap.cs" />
+    <Compile Include="Assets\Scripts\Manager\PlayerManager.cs" />
     <Compile Include="Assets\Scripts\Repository\QuestRepository.cs" />
     <Compile Include="Assets\GoogleSignIn\GoogleSignInStatusCode.cs" />
     <Compile Include="Assets\Scripts\Config\DontDestroy.cs" />
@@ -115,8 +117,10 @@
     <Compile Include="Assets\Scripts\Service\PlayerService.cs" />
     <Compile Include="Assets\Scripts\Model\GameData.cs" />
     <Compile Include="Assets\Scripts\GoogleLoginButton.cs" />
+    <Compile Include="Assets\Scripts\Model\Dungeon.cs" />
     <Compile Include="Assets\Scripts\Controller\AvatarController.cs" />
     <Compile Include="Assets\Scripts\Manager\GameSceneManager.cs" />
+    <Compile Include="Assets\Scripts\Model\Monster.cs" />
     <Compile Include="Assets\Scripts\Model\UI\Button\UIButton.cs" />
     <Compile Include="Assets\Scripts\Controller\AccountController.cs" />
     <Compile Include="Assets\Scripts\Manager\QuestManager.cs" />
@@ -137,6 +141,8 @@
     <Compile Include="Assets\Scripts\Manager\EnemyUIManager.cs" />
     <Compile Include="Assets\Scripts\Service\DataNetworkService.cs" />
     <Compile Include="Assets\Scripts\Service\AccountService.cs" />
+    <Compile Include="Assets\Scripts\Manager\DungeonManager.cs" />
+    <Compile Include="Assets\Scripts\Model\Rewards.cs" />
     <Compile Include="Assets\Scripts\Model\UI\Button\ButtonPanel.cs" />
     <Compile Include="Assets\Scripts\Repository\QuestContentRepository.cs" />
     <Compile Include="Assets\Scripts\Model\Enemy.cs" />

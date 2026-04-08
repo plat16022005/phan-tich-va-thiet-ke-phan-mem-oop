@@ -25,9 +25,14 @@ public class Weapon : NetworkBehaviour
         if (!IsOwner || !canHit) return;
 
         Enemy enemy = other.GetComponent<Enemy>();
+        Monster monster= other.GetComponent<Monster>();
         if (enemy != null)
         {
             DealDamageServerRpc(enemy.NetworkObject);
+        }
+        if (monster != null)
+        {
+            monster.TakeDamage(damage);
         }
     }
 

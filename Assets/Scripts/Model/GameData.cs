@@ -75,5 +75,55 @@ public class GameData
             cmd.Parameters.AddWithValue("@CharactersId", CharactersId);
             cmd.ExecuteNonQuery();
         }
+    }
+    public List<Dungeon> FindAllDungeon()
+    {
+        List<Dungeon> DungeonList = new List<Dungeon>();
+        using (MySqlConnection connection = new MySqlConnection(ConnectSQL.connectionString))
+        {
+            connection.Open();
+            string sql = "SELECT * FROM dungeon";
+            using (MySqlCommand cmd = new MySqlCommand(sql, connection))
+            {
+                using (MySqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        Dungeon dungeon = new Dungeon
+                        {
+                            id = reader.GetInt32(0),
+                            NameDungeon = reader.GetString(1),
+                            required = reader.GetInt32(2)  
+                        };
+                        DungeonList.Add(dungeon);
+                    }
+                }
+            }
+        }
+        return DungeonList;
+    }
+    public Rewards FindRewardofDungeon(int DungeonId)
+    {
+        using (MySqlConnection connection = new MySqlConnection(ConnectSQL.connectionString))
+        {
+            connection.Open();
+            string sql = "SELECT * FROM rewards WHERE id_dungeon = @id_dungeon";
+            MySqlCommand cmd = new MySqlCommand(sql, connection);
+            cmd.Parameters.AddWithValue("@id_dungeon", DungeonId);
+            using (MySqlDataReader reader = cmd.ExecuteReader())
+            {
+                if (reader.Read())
+                {
+                    Rewards rewards = new Rewards
+                    {
+                        id = reader.GetInt32(0),
+                        id_dungeon = reader.GetInt32(1),
+                        gold = reader.GetInt32(2)
+                    };
+                    return rewards;
+                }
+            }
+        }
+        return null;        
     }    
 }

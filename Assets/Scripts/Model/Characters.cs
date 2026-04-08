@@ -47,6 +47,14 @@ public class Characters
             GameUI.instance.DisplayMessage("Bạn đã thất bại");
         }
     }
+    public void UpdateState(int In_Dungeon)
+    {
+        DungeonManager.instance.CurrentDungeon = In_Dungeon;
+    }
+    public void ResetHp()
+    {
+        currenthp = hp;
+    }
 }
 
 public enum TypeRace

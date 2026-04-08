@@ -264,14 +264,10 @@ GameObject:
   - component: {fileID: 8914892407531729723}
   - component: {fileID: 7368177865727148727}
   - component: {fileID: 5388367992494518853}
-  - component: {fileID: 6181183390217979329}
-  - component: {fileID: 5024875827948677437}
   - component: {fileID: 5130986339585915691}
-  - component: {fileID: 6844322016773335458}
-  - component: {fileID: 198314482219165997}
-  - component: {fileID: 169047857814036845}
+  - component: {fileID: 6727935935356520499}
   m_Layer: 9
-  m_Name: green_slime
+  m_Name: green_slime_dungeon
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -388,46 +384,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.7012643, y: 0.680896}
   m_EdgeRadius: 0
---- !u!114 &6181183390217979329
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9009012672970509345}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 2344864836
-  InScenePlacedSourceGlobalObjectIdHash: 0
-  AlwaysReplicateAsRoot: 0
-  SynchronizeTransform: 1
-  ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 1
-  SpawnWithObservers: 1
-  DontDestroyWithOwner: 0
-  AutoObjectParentSync: 1
---- !u!114 &5024875827948677437
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9009012672970509345}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 89ca9c5f3c163d042aa536a0194c5746, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  NameEnemy: Slime
-  maxHealth: 100
-  enemyPrefab: {fileID: 9009012672970509345}
-  animator: {fileID: 8914892407531729723}
-  rb: {fileID: 7368177865727148727}
-  speed: 2
-  moveDistance: 4
 --- !u!210 &5130986339585915691
 SortingGroup:
   m_ObjectHideFlags: 0
@@ -440,7 +396,7 @@ SortingGroup:
   m_SortingLayer: 4
   m_SortingOrder: 0
   m_SortAtRoot: 0
---- !u!114 &6844322016773335458
+--- !u!114 &6727935935356520499
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -449,51 +405,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 9009012672970509345}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 96b77a885b4d26641a34b770cb4fdd74, type: 3}
+  m_Script: {fileID: 11500000, guid: 59f1bcf4840ac0e45b7a63f6fb6566ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TransitionStateInfoList: []
-  m_Animator: {fileID: 8914892407531729723}
---- !u!114 &198314482219165997
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9009012672970509345}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 07a34b753f7cdf547871fc03ad85fefe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  UseUnreliableDeltas: 0
-  SyncPositionX: 1
-  SyncPositionY: 1
-  SyncPositionZ: 1
-  SyncRotAngleX: 1
-  SyncRotAngleY: 1
-  SyncRotAngleZ: 1
-  SyncScaleX: 1
-  SyncScaleY: 1
-  SyncScaleZ: 1
-  PositionThreshold: 0.001
-  RotAngleThreshold: 0.01
-  ScaleThreshold: 0.01
-  UseQuaternionSynchronization: 0
-  UseQuaternionCompression: 0
-  UseHalfFloatPrecision: 0
-  InLocalSpace: 0
-  Interpolate: 1
-  SlerpPosition: 0
---- !u!114 &169047857814036845
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9009012672970509345}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 80d7c879794dfda4687da0e400131852, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  NameMonster: Slime Dungeon
+  maxHealth: 100
+  animator: {fileID: 8914892407531729723}
+  rb: {fileID: 7368177865727148727}
+  speed: 2
+  moveDistance: 4
