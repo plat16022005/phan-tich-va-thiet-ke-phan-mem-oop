@@ -41,6 +41,18 @@ public class GameUI : MonoBehaviour
     public Button IconQuest;
     public Button IconDungeon;
     public Button LeaveDungeon;
+    public Button IconEnchance;
+    [Header("Panel Enchance")]
+    public GameObject PanelEnchance;
+    public Transform ContentEnchance;
+    public GameObject InventoryPrefabs;
+    public TextMeshProUGUI NameItems;
+    public TextMeshProUGUI CurrentLv;
+    public TextMeshProUGUI CurrentStatsItem;
+    public TextMeshProUGUI NextLv;
+    public TextMeshProUGUI NextStatsItem;
+    public Image[] imgWeapon;
+    public Button EnhanceButton;
     private void Awake()
     {
         instance = this;
@@ -64,6 +76,8 @@ public class GameUI : MonoBehaviour
         }  
         else if (typepanel == "Panel Display Rewards")
             PanelDisplayRewards.gameObject.SetActive(false);
+        else if (typepanel == "Panel Enchance")
+            PanelEnchance.gameObject.SetActive(false);
     }
     public void DisplayListQuest(List<Quests> quests)
     {
@@ -127,6 +141,7 @@ public class GameUI : MonoBehaviour
         PanelQuestInfo.gameObject.SetActive(false);
         PanelListQuest.gameObject.SetActive(false);
         PanelLocation.gameObject.SetActive(false);
+        PanelEnchance.gameObject.SetActive(false);
         PanelMessage.gameObject.SetActive(true);
         Message.text = message;    
     }
@@ -148,12 +163,14 @@ public class GameUI : MonoBehaviour
     {
         IconQuest.gameObject.SetActive(false);
         IconDungeon.gameObject.SetActive(false);
+        IconEnchance.gameObject.SetActive(false);
         LeaveDungeon.gameObject.SetActive(true);
     }
     public void ExitDungeon()
     {
         IconQuest.gameObject.SetActive(true);
         IconDungeon.gameObject.SetActive(true);
+        IconEnchance.gameObject.SetActive(true);
         LeaveDungeon.gameObject.SetActive(false);
         GameObject player = NetworkManager.Singleton.LocalClient.PlayerObject.gameObject;
         Vector3 pos = new Vector3(-1.5f, 0.8f, 0.7f);
@@ -165,4 +182,77 @@ public class GameUI : MonoBehaviour
         PanelDisplayRewards.gameObject.SetActive(true);
         Rewards.text = $"{rewards.gold} vàng";
     }
+    public void OpenEnhancement()
+    {
+        List<Inventory> inventory = Inventory.instance.GetEquipmentList();
+        PanelEnchance.gameObject.SetActive(true);
+        foreach (Transform child in ContentEnchance)
+        {
+            Destroy(child.gameObject);
+        }
+        foreach (Inventory i in inventory)
+        {
+            GameObject obj = Instantiate(InventoryPrefabs, ContentEnchance);
+            InventoryItemUI ui = obj.GetComponent<InventoryItemUI>();
+            ui.Init(i);
+        }
+    }
+    private Items selectedItems;
+    public void SeeItemInfo(int EquipmentId)
+    {
+        selectedItems = Inventory.instance.GetItem(EquipmentId);
+        InventoryManager.instance.currentItemSelected = selectedItems;
+        EnhanceButton.onClick.AddListener(() => EnhanceItem(InventoryManager.instance.currentItemSelected));
+        int CurrentLevel = selectedItems.GetLevel();
+        int CurrentStats = selectedItems.GetBaseStats();
+        Debug.Log(CurrentLevel + CurrentStats);
+        DisplayItemDetails(CurrentLevel, CurrentStats);
+    }
+    public void DisplayItemDetails(int CurrentLevel, int CurrentStats)
+    {
+        imgWeapon[0].sprite = ItemsManager.instance.ImageItems[InventoryManager.instance.currentItemSelected.id];
+        imgWeapon[1].sprite = ItemsManager.instance.ImageItems[InventoryManager.instance.currentItemSelected.id];
+        NameItems.text = InventoryManager.instance.currentItemSelected.NameItem;
+        CurrentLv.text = "LV: " + CurrentLevel.ToString();
+        CurrentStatsItem.text = "Tấn công: " + CurrentStats.ToString();
+        NextLv.text = "LV: " + (CurrentLevel + 1).ToString();
+        NextStatsItem.text = "Tấn công: " + (CurrentStats + 5).ToString();
+    }
+    public void EnhanceItem(Items selectedItem)
+    {
+        Inventory.instance.Enhance(selectedItem);
+    }
+    public void CloseEnhancement()
+    {
+        Close();
+    }
+    void Close()
+    {
+        PanelEnchance.gameObject.SetActive(false);
+    }
+public void OpenTradeForm()
+{
+    Network.instance.RequestPlayerList();
+}
+    void ShowListPlayer(IReadOnlyDictionary<ulong, NetworkClient> ListPlayerOnline)
+    {
+        foreach (var client in ListPlayerOnline)
+        {
+            var playerObj = client.Value.PlayerObject;
+            if (playerObj == null) continue;
+
+            PlayerNetwork player = playerObj.GetComponent<PlayerNetwork>();
+
+            int clientId = (int)client.Key;
+            int playerId = player.CharacterId.Value;
+            Debug.Log("ClientID: " + clientId + " PlayerID: " + playerId); 
+        }
+    }
+public void ShowListPlayer(int[] clientIds, int[] playerIds)
+{
+    for (int i = 0; i < clientIds.Length; i++)
+    {
+        Debug.Log("ClientID: " + clientIds[i] + " PlayerID: " + playerIds[i]);
+    }
+}
 }

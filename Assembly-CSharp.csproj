@@ -69,10 +69,12 @@
     <Compile Include="Assets\Scripts\GoogleOAuthListener.cs" />
     <Compile Include="Assets\Scripts\FactoryMethod\GoogleLoginFactory.cs" />
     <Compile Include="Assets\Scripts\Manager\RelayManager.cs" />
+    <Compile Include="Assets\Scripts\Model\Network.cs" />
     <Compile Include="Assets\Scripts\Controller\UI\PanelController.cs" />
     <Compile Include="Assets\Scripts\Config\ConnectSQL.cs" />
     <Compile Include="Assets\Scripts\Config\SessionManager.cs" />
     <Compile Include="Assets\Scripts\Model\Weapon.cs" />
+    <Compile Include="Assets\Scripts\Manager\InventoryManager.cs" />
     <Compile Include="Assets\Scripts\Repository\Impl\QuestRepositoryImpl.cs" />
     <Compile Include="Assets\GoogleSignIn\Future.cs" />
     <Compile Include="Assets\Scripts\Manager\SpritesManager.cs" />
@@ -102,6 +104,7 @@
     <Compile Include="Assets\MoveController.cs" />
     <Compile Include="Assets\GoogleSignIn\GoogleSignInUser.cs" />
     <Compile Include="Assets\GoogleSignIn\GoogleSignInConfiguration.cs" />
+    <Compile Include="Assets\Scripts\Config\Network\PlayerNetwork.cs" />
     <Compile Include="Assets\Scripts\Config\PlayerCombat.cs" />
     <Compile Include="Assets\GoogleSignIn\Impl\NativeFuture.cs" />
     <Compile Include="Assets\Scripts\Model\Account.cs" />
@@ -115,13 +118,17 @@
     <Compile Include="Assets\Scripts\Manager\Player\Data\CustomData.cs" />
     <Compile Include="Assets\Scripts\Model\Inventory.cs" />
     <Compile Include="Assets\Scripts\Service\PlayerService.cs" />
+    <Compile Include="Assets\Scripts\Model\UI\InventoryItemUI.cs" />
+    <Compile Include="Assets\Scripts\Manager\EnchanceManager.cs" />
     <Compile Include="Assets\Scripts\Model\GameData.cs" />
     <Compile Include="Assets\Scripts\GoogleLoginButton.cs" />
     <Compile Include="Assets\Scripts\Model\Dungeon.cs" />
+    <Compile Include="Assets\Scripts\Model\Items.cs" />
     <Compile Include="Assets\Scripts\Controller\AvatarController.cs" />
     <Compile Include="Assets\Scripts\Manager\GameSceneManager.cs" />
     <Compile Include="Assets\Scripts\Model\Monster.cs" />
     <Compile Include="Assets\Scripts\Model\UI\Button\UIButton.cs" />
+    <Compile Include="Assets\Scripts\Manager\ItemsManager.cs" />
     <Compile Include="Assets\Scripts\Controller\AccountController.cs" />
     <Compile Include="Assets\Scripts\Manager\QuestManager.cs" />
     <Compile Include="Assets\Scripts\Model\UI\Panel\PanelQuenMatKhau.cs" />
@@ -132,6 +139,7 @@
     <Compile Include="Assets\Scripts\Controller\EmailController.cs" />
     <Compile Include="Assets\Scripts\FactoryMethod\ILogin.cs" />
     <Compile Include="Assets\Scripts\Controller\UI\ButtonController.cs" />
+    <Compile Include="Assets\Scripts\Model\Resource.cs" />
     <Compile Include="Assets\Scripts\Manager\Player\CustomNetworkManager.cs" />
     <Compile Include="Assets\Scripts\FactoryMethod\AccountLoginFactory.cs" />
     <Compile Include="Assets\Scripts\Repository\Impl\CharactersRepositoryImpl.cs" />

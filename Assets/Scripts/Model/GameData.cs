@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using MySql.Data.MySqlClient;
+using Unity.Services.Lobbies.Models;
 using UnityEngine;
 
 public class GameData
@@ -125,5 +126,134 @@ public class GameData
             }
         }
         return null;        
-    }    
+    }
+    // public List<Items> GetInventoryData()
+    // {
+    //     List<Items> items = new List<Items>();
+
+    //     using (MySqlConnection connection = new MySqlConnection(ConnectSQL.connectionString))
+    //     {
+    //         connection.Open();
+    //         string sql = "SELECT id_item FROM inventory WHERE id_player = @id_player";
+
+    //         using (MySqlCommand cmd = new MySqlCommand(sql, connection))
+    //         {
+    //             cmd.Parameters.AddWithValue("@id_player", PlayerManager.instance.characters.id);
+    //             using (MySqlDataReader reader = cmd.ExecuteReader())
+    //             {
+    //                 while (reader.Read())
+    //                 {
+    //                     Items i = new Items
+    //                     {
+    //                         id = reader.GetInt32(0),
+    //                         NameItem = ItemsManager.instance.NameItems[reader.GetInt32(0)]
+    //                     };
+
+    //                     items.Add(i);
+    //                 }
+    //             }
+    //         }
+    //     }
+
+    //     return items;
+    // }
+    public List<Inventory> GetInventoryData()
+    {
+        List<Inventory> inventory = new List<Inventory>();
+
+        using (MySqlConnection connection = new MySqlConnection(ConnectSQL.connectionString))
+        {
+            connection.Open();
+            string sql = "SELECT * FROM inventory WHERE id_player = @id_player";
+
+            using (MySqlCommand cmd = new MySqlCommand(sql, connection))
+            {
+                cmd.Parameters.AddWithValue("@id_player", PlayerManager.instance.characters.id);
+                using (MySqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        Inventory i = new Inventory
+                        {
+                            id = reader.GetInt32(0),
+                            id_player = reader.GetInt32(1),
+                            id_item = reader.GetInt32(2)
+                        };
+
+                        inventory.Add(i);
+                    }
+                }
+            }
+        }
+
+        return inventory;
+    }
+    public int FindLvEquipmentofPlayer(int InventoryId)
+    {
+        using (MySqlConnection connection = new MySqlConnection(ConnectSQL.connectionString))
+        {
+            connection.Open();
+            string sql = "SELECT lv FROM enchancement WHERE id_inventory = @id_inventory";
+            using (MySqlCommand cmd = new MySqlCommand(sql, connection))
+            {
+                cmd.Parameters.AddWithValue("@id_inventory", InventoryId);
+                using (MySqlDataReader reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        return reader.GetInt32(0);
+                    }
+                }
+            }
+        }
+        return 0;
+    }
+    public Dictionary<int, (Items, int)> FindItemsWithLvofPlayer()
+    {
+        Dictionary<int, (Items, int)> ItemsWithLv = new Dictionary<int, (Items, int)>();
+
+        using (MySqlConnection connection = new MySqlConnection(ConnectSQL.connectionString))
+        {
+            connection.Open();
+            string sql = "SELECT it.id AS item_id, it.NameItem, e.lv FROM inventory i JOIN items it ON i.id_item = it.id LEFT JOIN enchancement e ON e.id_inventory = i.id WHERE i.id_player = @id_player";
+
+            using (MySqlCommand cmd = new MySqlCommand(sql, connection))
+            {
+                cmd.Parameters.AddWithValue("@id_player", PlayerManager.instance.characters.id);
+                using (MySqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        Items i = new Items
+                        {
+                            id = reader.GetInt32(0),
+                            NameItem = reader.GetString(1),
+                        };
+                        int lv = reader.GetInt32(2);
+                        Debug.Log(reader.GetInt32(0) + reader.GetString(1) + reader.GetInt32(2));
+                        ItemsWithLv.Add(reader.GetInt32(0), (i,lv));
+                    }
+                }
+            }
+        }
+
+        return ItemsWithLv;        
+    }
+    public void SaveProgress(Items selectedItems, Resource goldRes)
+    {
+        
+        using (MySqlConnection connection = new MySqlConnection(ConnectSQL.connectionString))
+        {
+            connection.Open();
+            var cmd1 = new MySqlCommand("UPDATE characters SET gold = @gold WHERE id = @CharactersId", connection);
+            cmd1.Parameters.AddWithValue("@gold", PlayerManager.instance.characters.gold);
+            cmd1.Parameters.AddWithValue("@CharactersId", PlayerManager.instance.characters.id);
+            cmd1.ExecuteNonQuery();
+            var cmd2 = new MySqlCommand("UPDATE enchancement e JOIN inventory i ON e.id_inventory = i.id SET e.lv = e.lv + 1 WHERE i.id_player = @id_player AND i.id_item = @id_item;", connection);
+            cmd2.Parameters.AddWithValue("@id_player", PlayerManager.instance.characters.id);
+            cmd2.Parameters.AddWithValue("@id_item", selectedItems.id);
+            cmd2.ExecuteNonQuery();
+            InventoryManager.instance.itemsLv[selectedItems.id] = (selectedItems, selectedItems.GetLevel() + 1);
+        }        
+    }
 }
