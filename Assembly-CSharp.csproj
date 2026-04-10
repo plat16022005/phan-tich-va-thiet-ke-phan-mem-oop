@@ -120,6 +120,7 @@
     <Compile Include="Assets\Scripts\Service\PlayerService.cs" />
     <Compile Include="Assets\Scripts\Model\UI\InventoryItemUI.cs" />
     <Compile Include="Assets\Scripts\Manager\EnchanceManager.cs" />
+    <Compile Include="Assets\Scripts\Manager\StatsManager.cs" />
     <Compile Include="Assets\Scripts\Model\GameData.cs" />
     <Compile Include="Assets\Scripts\GoogleLoginButton.cs" />
     <Compile Include="Assets\Scripts\Model\Dungeon.cs" />

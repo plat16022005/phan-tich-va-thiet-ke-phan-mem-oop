@@ -18,7 +18,6 @@ public class GameUI : MonoBehaviour
     public TextMeshProUGUI NameQuestInfo;
     public TextMeshProUGUI ContentQuestInfo;
     public Button ButtonFollow;
-    private CharactersRepository CharactersRepository;
     public Button CancelQuest;
     public Button ViewQuest;
     public Button CompleteQuest;
@@ -53,12 +52,18 @@ public class GameUI : MonoBehaviour
     public TextMeshProUGUI NextStatsItem;
     public Image[] imgWeapon;
     public Button EnhanceButton;
+    [Header("Panel Stats")]
+    public GameObject PanelStats;
+    public TextMeshProUGUI HpPoint;
+    public TextMeshProUGUI ManaPoint;
+    public TextMeshProUGUI AtkPoint;
+    public TextMeshProUGUI DefPoint;
+    public TextMeshProUGUI Point;
     private void Awake()
     {
         instance = this;
 
-        CharactersRepository = new CharactersRepositoryImpl();
-        characters = CharactersRepository.GetCharacterByAccountId(SessionManager.Instance.account.id);
+        characters = PlayerManager.instance.characters;
     }
     public void ClosePanel(string typepanel)
     {
@@ -78,6 +83,8 @@ public class GameUI : MonoBehaviour
             PanelDisplayRewards.gameObject.SetActive(false);
         else if (typepanel == "Panel Enchance")
             PanelEnchance.gameObject.SetActive(false);
+        else if (typepanel == "Panel Stats")
+            PanelStats.gameObject.SetActive(false);
     }
     public void DisplayListQuest(List<Quests> quests)
     {
@@ -138,10 +145,13 @@ public class GameUI : MonoBehaviour
     }
     public void DisplayMessage(string message)
     {
-        PanelQuestInfo.gameObject.SetActive(false);
-        PanelListQuest.gameObject.SetActive(false);
-        PanelLocation.gameObject.SetActive(false);
-        PanelEnchance.gameObject.SetActive(false);
+        if (PanelQuestInfo != null && PanelListQuest != null && PanelLocation != null && PanelEnchance != null)
+        {
+            PanelQuestInfo.gameObject.SetActive(false);
+            PanelListQuest.gameObject.SetActive(false);
+            PanelLocation.gameObject.SetActive(false);
+            PanelEnchance.gameObject.SetActive(false);
+        }
         PanelMessage.gameObject.SetActive(true);
         Message.text = message;    
     }
@@ -230,29 +240,61 @@ public class GameUI : MonoBehaviour
     {
         PanelEnchance.gameObject.SetActive(false);
     }
-public void OpenTradeForm()
-{
-    Network.instance.RequestPlayerList();
-}
-    void ShowListPlayer(IReadOnlyDictionary<ulong, NetworkClient> ListPlayerOnline)
+    public void OpenTradeForm()
     {
-        foreach (var client in ListPlayerOnline)
+        Network.instance.RequestPlayerList();
+    }
+    public void ShowListPlayer(int[] clientIds, int[] playerIds)
+    {
+        for (int i = 0; i < clientIds.Length; i++)
         {
-            var playerObj = client.Value.PlayerObject;
-            if (playerObj == null) continue;
-
-            PlayerNetwork player = playerObj.GetComponent<PlayerNetwork>();
-
-            int clientId = (int)client.Key;
-            int playerId = player.CharacterId.Value;
-            Debug.Log("ClientID: " + clientId + " PlayerID: " + playerId); 
+            Debug.Log("ClientID: " + clientIds[i] + " PlayerID: " + playerIds[i]);
         }
     }
-public void ShowListPlayer(int[] clientIds, int[] playerIds)
-{
-    for (int i = 0; i < clientIds.Length; i++)
+    public void OpenCharacterStats()
     {
-        Debug.Log("ClientID: " + clientIds[i] + " PlayerID: " + playerIds[i]);
+        characters.LoadStatsAndPotentialPoints();
     }
-}
+    public void DisplayStats(int[] stats, int point)
+    {
+        PanelStats.gameObject.SetActive(true);
+        Point.text = point.ToString();
+        HpPoint.text = stats[0].ToString();
+        ManaPoint.text = stats[1].ToString();
+        AtkPoint.text = stats[2].ToString();
+        DefPoint.text = stats[3].ToString();
+    }
+    public void IncreaseStatTemp(string TempType)
+    {
+        characters.AddStatPreview(TempType);
+    }
+    public void UpdatePreviewDisplay()
+    {
+        Point.text = StatsManager.instance.potentialPoint.ToString();
+        HpPoint.text = StatsManager.instance.stats[0].ToString();
+        ManaPoint.text = StatsManager.instance.stats[1].ToString();
+        AtkPoint.text = StatsManager.instance.stats[2].ToString();
+        DefPoint.text = StatsManager.instance.stats[3].ToString();        
+    }
+    public void ConfirmStatsUpgrade()
+    {
+        characters.ApplyUpgrade();
+    }
+    public void ResetStatsTemp()
+    {
+        characters.CancelReview();
+    }
+    public void CreateNewCharacter()
+    {
+        Characters NewCharacter = new Characters();
+        NewCharacter.CreatePlayer(
+            AvatarController.instance.BoxName.text,
+            AvatarController.instance.hairIndex, 
+            AvatarController.instance.eyesIndex, 
+            AvatarController.instance.noseIndex, 
+            AvatarController.instance.mouthIndex, 
+            AvatarController.instance.raceIndex, 
+            AvatarController.instance.classIndex
+        );
+    }
 }

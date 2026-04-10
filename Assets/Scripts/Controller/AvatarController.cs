@@ -45,19 +45,22 @@ public class AvatarController : MonoBehaviour
     public TMP_InputField BoxClass;
     public String[] ClassString;
     public TMP_InputField ClassDetail;
+    public static AvatarController instance;
+    public int hairIndex = 0;
+    public int eyesIndex = 0;
+    public int noseIndex = 0;
+    public int mouthIndex = 0;
 
-    int hairIndex = 0;
-    int eyesIndex = 0;
-    int noseIndex = 0;
-    int mouthIndex = 0;
+    public int raceIndex = 0;
+    public int classIndex = 0;
 
-    int raceIndex = 0;
-    int classIndex = 0;
-
+    private void Awake()
+    {
+        instance = this;
+    }
     void Start()
     {
         UpdateAll();
-        BoxName.onValidateInput += SetNameValidate;
     }
     char SetNameValidate(string text, int charIndex, char addedChar)
     {

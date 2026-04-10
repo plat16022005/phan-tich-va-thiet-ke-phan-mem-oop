@@ -6,6 +6,7 @@ public class PlayerManager : MonoBehaviour
 {
     private CharactersRepository charactersRepository;
     public Characters characters;
+    public int potentialPoint;
     public static PlayerManager instance;
     private void Awake()
     {
@@ -17,5 +18,6 @@ public class PlayerManager : MonoBehaviour
         instance = this;
         charactersRepository = new CharactersRepositoryImpl();
         characters = charactersRepository.GetCharacterByAccountId(SessionManager.Instance.account.id);
+        potentialPoint = 10;
     }
 }
