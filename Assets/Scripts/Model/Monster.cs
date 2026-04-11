@@ -70,21 +70,6 @@ public class Monster : MonoBehaviour
 
         Destroy(gameObject, 2f);
     }
-    public void InitMonsterData()
-    {
-        StartCoroutine(SpawnMonsterAfterDelay());
-    }
-
-    IEnumerator SpawnMonsterAfterDelay()
-    {
-        yield return new WaitForSeconds(3f);
-
-        Instantiate(
-            DungeonManager.instance.ListMonster[DungeonManager.instance.CurrentDungeon],
-            DungeonManager.instance.SpawnMonster.position,
-            Quaternion.identity
-        );
-    }
     public void DestroyMonsterofDungeon()
     {
         Monster[] monsters = FindObjectsOfType<Monster>();

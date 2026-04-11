@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using MySql.Data.MySqlClient;
@@ -469,6 +470,203 @@ public class GameData
             cmd.Parameters.AddWithValue("@mouth", avatar.mouth);
 
             cmd.ExecuteNonQuery();
+        }
+    }
+    public List<Characters> GetCharactersByIds(int[] characterIds)
+    {
+        List<Characters> list = new List<Characters>();
+
+        if (characterIds == null || characterIds.Length == 0)
+            return list;
+
+        using (MySqlConnection conn = new MySqlConnection(ConnectSQL.connectionString))
+        {
+            conn.Open();
+
+            // Tạo danh sách param
+            List<string> paramNames = new List<string>();
+            for (int i = 0; i < characterIds.Length; i++)
+            {
+                paramNames.Add($"@id{i}");
+            }
+
+            string sql = $"SELECT * FROM characters WHERE id IN ({string.Join(",", paramNames)})";
+
+            MySqlCommand cmd = new MySqlCommand(sql, conn);
+
+            for (int i = 0; i < characterIds.Length; i++)
+            {
+                cmd.Parameters.AddWithValue(paramNames[i], characterIds[i]);
+            }
+
+            using (MySqlDataReader reader = cmd.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    Characters character = new Characters();
+
+                    character.id = reader.GetInt32("id");
+                    character.account_id = reader.GetInt32("account_id");
+                    character.nickname = reader.GetString("nickname");
+
+                    character.hp = reader.GetInt32("hp");
+                    character.mana = reader.GetInt32("mana");
+                    character.atk = reader.GetInt32("atk");
+                    character.def = reader.GetInt32("def");
+                    character.speed = reader.GetInt32("speed");
+
+                    character.crit_rate = reader.GetFloat("crit_rate");
+                    character.crit = reader.GetFloat("crit");
+
+                    character.race = (TypeRace)reader.GetInt32("race");
+                    character.@class = (TypeClass)reader.GetInt32("class");
+
+                    character.level = reader.GetInt32("level");
+                    character.exp = reader.GetInt32("exp");
+                    character.gold = reader.GetInt32("gold");
+                    character.currenthp = reader.GetInt32("currenthp");
+
+                    list.Add(character);
+                }
+            }
+        }
+
+        return list;
+    }
+    public Characters GetCharacterById(int characterId)
+    {
+        using (MySqlConnection conn = new MySqlConnection(ConnectSQL.connectionString))
+        {
+            conn.Open();
+            string sql = "SELECT * FROM characters WHERE id = @characterId";
+            MySqlCommand cmd = new MySqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue("@characterId", characterId);
+            using (MySqlDataReader reader = cmd.ExecuteReader())
+            {
+                if (reader.Read())
+                {
+                    Characters character = new Characters();
+
+                    character.id = reader.GetInt32("id");
+                    character.account_id = reader.GetInt32("account_id");
+                    character.nickname = reader.GetString("nickname");
+
+                    character.hp = reader.GetInt32("hp");
+                    character.mana = reader.GetInt32("mana");
+                    character.atk = reader.GetInt32("atk");
+                    character.def = reader.GetInt32("def");
+                    character.speed = reader.GetInt32("speed");
+
+                    character.crit_rate = reader.GetFloat("crit_rate");
+                    character.crit = reader.GetFloat("crit");
+
+                    character.race = (TypeRace)reader.GetInt32("race");
+                    character.@class = (TypeClass)reader.GetInt32("class");
+
+                    character.level = reader.GetInt32("level");
+                    character.exp = reader.GetInt32("exp");
+                    character.gold = reader.GetInt32("gold");
+                    character.currenthp = reader.GetInt32("currenthp");
+
+                    return character;
+                }                
+            }
+        }
+        return null;
+    }
+    public int GetLvEquipmentOfPlayer(int CharacterId, int EquipmentId)
+    {
+        using (MySqlConnection connection = new MySqlConnection(ConnectSQL.connectionString))
+        {
+            connection.Open();
+            int IdInventory = 0;
+            string sql = "SELECT id FROM inventory WHERE id_player = @id_player and id_item = @id_item";
+            string sql1 = "SELECT lv FROM enchancement WHERE id = @id";
+            using (MySqlCommand cmd = new MySqlCommand(sql, connection))
+            {
+                cmd.Parameters.AddWithValue("@id_player", CharacterId);
+                cmd.Parameters.AddWithValue("@id_item", EquipmentId);
+                using (MySqlDataReader reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        IdInventory = reader.GetInt32(0);
+                    }
+                }
+            }
+            using (MySqlCommand cmd = new MySqlCommand(sql1, connection))
+            {
+                cmd.Parameters.AddWithValue("@id", IdInventory);
+                using (MySqlDataReader reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        return reader.GetInt32(0);
+                    }
+                }
+            }
+        }
+        return 0;        
+    }
+    public Tuple<int, int> FindLvAndEquipment(int InventoryId)
+    {
+        using (MySqlConnection connection = new MySqlConnection(ConnectSQL.connectionString))
+        {
+            connection.Open();
+            string sql = "SELECT i.id_item, e.lv FROM inventory i JOIN enchancement e ON i.id = e.id_inventory WHERE i.id = @InventoryId;";
+            using (MySqlCommand cmd = new MySqlCommand(sql, connection))
+            {
+                cmd.Parameters.AddWithValue("@InventoryId", InventoryId);
+                using (MySqlDataReader reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        return new (reader.GetInt32(0), reader.GetInt32(1));
+                    }
+                }
+            }
+        }
+        return new (0,0);
+    }
+    public void ExecuteTrade(int charA, int itemA, int charB, int itemB)
+    {
+        using (MySqlConnection conn = new MySqlConnection(ConnectSQL.connectionString))
+        {
+            conn.Open();
+
+            using (MySqlTransaction transaction = conn.BeginTransaction())
+            {
+                try
+                {
+                    // 🔥 item A → sang B
+                    var cmd1 = new MySqlCommand(
+                        "UPDATE inventory SET id_player = @charB WHERE id = @itemA",
+                        conn, transaction
+                    );
+                    cmd1.Parameters.AddWithValue("@charB", charB);
+                    cmd1.Parameters.AddWithValue("@itemA", itemA);
+                    cmd1.ExecuteNonQuery();
+
+                    // 🔥 item B → sang A
+                    var cmd2 = new MySqlCommand(
+                        "UPDATE inventory SET id_player = @charA WHERE id = @itemB",
+                        conn, transaction
+                    );
+                    cmd2.Parameters.AddWithValue("@charA", charA);
+                    cmd2.Parameters.AddWithValue("@itemB", itemB);
+                    cmd2.ExecuteNonQuery();
+
+                    // ✅ commit nếu OK
+                    transaction.Commit();
+
+                    Debug.Log("Trade thành công!");
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    Debug.LogError("Trade thất bại: " + ex.Message);
+                }
+            }
         }
     }
 }

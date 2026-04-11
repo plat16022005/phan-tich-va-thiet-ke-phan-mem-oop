@@ -57,7 +57,7 @@ public class Dungeon : MonoBehaviour
     }
     public void FinishDungeon()
     {
-        if (PlayerManager.instance.characters.currenthp > 0)
+        if (characters.currenthp > 0)
         {
             if (DungeonManager.instance.process == 0)
             {
@@ -65,7 +65,7 @@ public class Dungeon : MonoBehaviour
                 Rewards.instance.LoadReward();
             }
         }
-        else if (PlayerManager.instance.characters.currenthp > 0)
+        else
         {
             GameUI.instance.DisplayMessage("Bạn đã thất bại");
         }

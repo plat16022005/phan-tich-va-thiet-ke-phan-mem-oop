@@ -137,9 +137,11 @@
     <Compile Include="Assets\Scripts\Model\UI\Panel\UIPanel.cs" />
     <Compile Include="Assets\Scripts\Model\Avatar.cs" />
     <Compile Include="Assets\Scripts\Model\QuestContent.cs" />
+    <Compile Include="Assets\Scripts\Model\TradeSession.cs" />
     <Compile Include="Assets\Scripts\Controller\EmailController.cs" />
     <Compile Include="Assets\Scripts\FactoryMethod\ILogin.cs" />
     <Compile Include="Assets\Scripts\Controller\UI\ButtonController.cs" />
+    <Compile Include="Assets\Scripts\Model\UI\TradeItemUI.cs" />
     <Compile Include="Assets\Scripts\Model\Resource.cs" />
     <Compile Include="Assets\Scripts\Manager\Player\CustomNetworkManager.cs" />
     <Compile Include="Assets\Scripts\FactoryMethod\AccountLoginFactory.cs" />
@@ -152,6 +154,7 @@
     <Compile Include="Assets\Scripts\Service\AccountService.cs" />
     <Compile Include="Assets\Scripts\Manager\DungeonManager.cs" />
     <Compile Include="Assets\Scripts\Model\Rewards.cs" />
+    <Compile Include="Assets\Scripts\Model\UI\TradeInventoryUI.cs" />
     <Compile Include="Assets\Scripts\Model\UI\Button\ButtonPanel.cs" />
     <Compile Include="Assets\Scripts\Repository\QuestContentRepository.cs" />
     <Compile Include="Assets\Scripts\Model\Enemy.cs" />

@@ -28,7 +28,8 @@ public class Quests : MonoBehaviour
     }
     public void ChoiceQuest(int QuestId)
     {
-        QuestContent quest = GameData.ViewDetail(QuestId);
+        QuestContent quest = new QuestContent();
+        quest = GameData.ViewDetail(QuestId);
         GameUI.instance.DisplayDetailQuest(quest);
     }
     public void Track(int QuestId)
@@ -49,7 +50,8 @@ public class Quests : MonoBehaviour
     }
     public bool CheckConditions(int QuestId)
     {
-        QuestContent quest = GameData.ViewDetail(QuestId);
+        QuestContent quest = new QuestContent();
+        quest = GameData.ViewDetail(QuestId);
         if (QuestManager.instance.playerProcess[NetworkManager.Singleton.LocalClientId] >= quest.required)
         {
             return true;

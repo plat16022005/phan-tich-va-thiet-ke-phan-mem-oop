@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -41,6 +42,8 @@ public class GameUI : MonoBehaviour
     public Button IconDungeon;
     public Button LeaveDungeon;
     public Button IconEnchance;
+    public Button IconStats;
+    public Button IconTrade;
     [Header("Panel Enchance")]
     public GameObject PanelEnchance;
     public Transform ContentEnchance;
@@ -59,6 +62,21 @@ public class GameUI : MonoBehaviour
     public TextMeshProUGUI AtkPoint;
     public TextMeshProUGUI DefPoint;
     public TextMeshProUGUI Point;
+    [Header("Panel List Player Trade")]
+    public GameObject PanelListTrade;
+    public Transform ContentListTrade;
+    public GameObject PlayerTradePrefabs;
+    [Header("Panel Request Trade")]
+    public GameObject FormRequestTrade;
+    public TextMeshProUGUI MessageRequestTrade;
+    [Header("Panel Trade")]
+    public GameObject PanelTrade;
+    public Transform ContentTrade;
+    public GameObject InventoryTradePrefab;
+    public Image ImageItem1;
+    public TextMeshProUGUI LvItem1;
+    public Image ImageItem2;
+    public TextMeshProUGUI LvItem2;
     private void Awake()
     {
         instance = this;
@@ -85,6 +103,10 @@ public class GameUI : MonoBehaviour
             PanelEnchance.gameObject.SetActive(false);
         else if (typepanel == "Panel Stats")
             PanelStats.gameObject.SetActive(false);
+        else if (typepanel == "Panel List player trade")
+            PanelListTrade.gameObject.SetActive(false);
+        else if (typepanel == "Panel Trade")
+            PanelTrade.gameObject.SetActive(false);
     }
     public void DisplayListQuest(List<Quests> quests)
     {
@@ -174,6 +196,8 @@ public class GameUI : MonoBehaviour
         IconQuest.gameObject.SetActive(false);
         IconDungeon.gameObject.SetActive(false);
         IconEnchance.gameObject.SetActive(false);
+        IconTrade.gameObject.SetActive(false);
+        IconStats.gameObject.SetActive(false);
         LeaveDungeon.gameObject.SetActive(true);
     }
     public void ExitDungeon()
@@ -181,6 +205,8 @@ public class GameUI : MonoBehaviour
         IconQuest.gameObject.SetActive(true);
         IconDungeon.gameObject.SetActive(true);
         IconEnchance.gameObject.SetActive(true);
+        IconTrade.gameObject.SetActive(true);
+        IconStats.gameObject.SetActive(true);
         LeaveDungeon.gameObject.SetActive(false);
         GameObject player = NetworkManager.Singleton.LocalClient.PlayerObject.gameObject;
         Vector3 pos = new Vector3(-1.5f, 0.8f, 0.7f);
@@ -246,11 +272,116 @@ public class GameUI : MonoBehaviour
     }
     public void ShowListPlayer(int[] clientIds, int[] playerIds)
     {
-        for (int i = 0; i < clientIds.Length; i++)
+        PanelListTrade.gameObject.SetActive(true);
+        GameData GameData = new GameData();
+        List<Characters> ListCharacterOnline = GameData.GetCharactersByIds(playerIds);
+
+        foreach (Transform child in ContentListTrade)
         {
-            Debug.Log("ClientID: " + clientIds[i] + " PlayerID: " + playerIds[i]);
+            Destroy(child.gameObject);
+        }
+        foreach (Characters c in ListCharacterOnline)
+        {
+            int index = ListCharacterOnline.IndexOf(c);
+            GameObject obj = Instantiate(PlayerTradePrefabs, ContentListTrade);
+            TradeItemUI ui = obj.GetComponent<TradeItemUI>();
+            ui.Init(c, (ulong)clientIds[index]);
         }
     }
+    public void TradeWithPlayer(ulong IdTargetClient, Characters TargetCharacter)
+    {
+        Debug.Log("ClientId: " + IdTargetClient + " CharacterId: " + TargetCharacter.id);
+        PanelListTrade.gameObject.SetActive(false);
+        Network.instance.RequestTrade(IdTargetClient);
+    }
+    private ulong currentSenderClientId;
+    public void ShowTradeRequest(ulong IdSenderClient, int IdSenderCharacter)
+    {
+        currentSenderClientId = IdSenderClient;
+        GameData GameData = new GameData();
+        Characters character = new Characters();
+        character = GameData.GetCharacterById(IdSenderCharacter);
+        FormRequestTrade.gameObject.SetActive(true);
+        MessageRequestTrade.text = "Người chơi " + character.nickname + " muốn giao dịch với bạn";
+    }
+    public void AcceptTrade()
+    {
+        FormRequestTrade.SetActive(false);
+
+        Network.instance.AcceptTrade(currentSenderClientId);
+    }
+    private int otherCharacterId;
+public void OpenTradeUI(ulong playerA, ulong playerB, int charA, int charB)
+{
+    PanelTrade.SetActive(true);
+
+    ulong myId = NetworkManager.Singleton.LocalClientId;
+
+    // xác định mình là A hay B
+    if (myId == playerA)
+        otherCharacterId = charB;
+    else
+        otherCharacterId = charA;
+
+    Debug.Log("Đang trade với CharacterId: " + otherCharacterId);
+
+    List<Inventory> InventoryList = Inventory.instance.GetEquipmentList();
+
+    foreach (Transform child in ContentTrade)
+    {
+        Destroy(child.gameObject);
+    }
+
+    foreach (Inventory i in InventoryList)
+    {
+        GameObject obj = Instantiate(InventoryTradePrefab, ContentTrade);
+        TradeInventoryUI ui = obj.GetComponent<TradeInventoryUI>();
+        ui.Init(i);
+    }
+}
+    private Inventory selectedItem;
+    public void SelectItem(Inventory item)
+    {
+        selectedItem = item;
+
+        Debug.Log("Chọn item ID: " + item.id);
+        Debug.Log("Đang trade với CharacterId: " + otherCharacterId);
+
+        // highlight UI (nếu muốn)
+        
+        // gửi lên server
+        Network.instance.SelectTradeItem(item.id);
+    }
+public void UpdateTradeItem(ulong senderId, int inventoryId)
+{
+    GameData GameData = new GameData();
+    ulong myId = NetworkManager.Singleton.LocalClientId;
+
+    if (senderId == myId)
+    {
+        Debug.Log("Mình chọn item: " + inventoryId);
+        Tuple<int, int> ItemAndLv = GameData.FindLvAndEquipment(inventoryId);
+        ImageItem1.sprite = ItemsManager.instance.ImageItems[ItemAndLv.Item1];
+        LvItem1.text = ItemAndLv.Item2.ToString();
+    }
+    else
+    {
+        Debug.Log("Đối phương chọn item: " + inventoryId);
+        Tuple<int, int> ItemAndLv = GameData.FindLvAndEquipment(inventoryId);
+        ImageItem2.sprite = ItemsManager.instance.ImageItems[ItemAndLv.Item1];
+        LvItem2.text = ItemAndLv.Item2.ToString();
+    }
+}
+public void AcceptItemTrade()
+{
+    Network.instance.ConfirmTrade();
+}
+public void OnTradeCompleted()
+{
+    Debug.Log("Trade thành công!");
+
+    PanelTrade.SetActive(false);
+}
     public void OpenCharacterStats()
     {
         characters.LoadStatsAndPotentialPoints();
@@ -297,4 +428,29 @@ public class GameUI : MonoBehaviour
             AvatarController.instance.classIndex
         );
     }
+    public void DeclineTrade()
+    {
+        CloseFormRequestTrade();
+    }
+    public void CloseFormRequestTrade()
+    {
+        FormRequestTrade.gameObject.SetActive(false);
+    }
+    public void CancelTrade()
+    {
+        Network.instance.CancelTrade();
+    }
+public void CloseTradeUI()
+{
+    PanelTrade.SetActive(false);
+
+    // reset item hiển thị nếu cần
+    ImageItem1.sprite = null;
+    ImageItem2.sprite = null;
+
+    LvItem1.text = "";
+    LvItem2.text = "";
+
+    Debug.Log("Đã đóng giao diện trade");
+}
 }

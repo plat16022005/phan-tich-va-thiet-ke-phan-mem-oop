@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class QuestContent : MonoBehaviour
+public class QuestContent
 {
     public int id;
     public int id_quest;
