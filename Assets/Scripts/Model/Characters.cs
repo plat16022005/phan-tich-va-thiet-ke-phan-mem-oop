@@ -1,14 +1,17 @@
 using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine.SceneManagement;
 
 public class Characters
 {
+    private Avatar avatar;
+    private Equipment equipment;
+    private Inventory inventory;
+    private List<Quests> quests;
     private GameData GameData = new GameData();
-    public Characters()
-    {
-        
+    public Characters(){
     }
     public int id { get; set; }
     public int account_id { get; set; }
@@ -170,7 +173,7 @@ public class Characters
         };
         GameData.CreateCharacter(characters);
         Characters currentCharacters = GameData.GetCharacterByAccountId(characters.account_id);
-        Avatar avatar = new Avatar{
+        avatar = new Avatar{
             character_id = currentCharacters.id,
             hair = hairIndex,
             eyes = eyesIndex,
@@ -178,7 +181,7 @@ public class Characters
             mouth = mouthIndex
         };
         GameData.CreateAvatar(avatar);
-        Equipment equipment = new Equipment{
+        equipment = new Equipment{
             character_id = currentCharacters.id,
             weapon_id = classIndex + 1,
             armor_id = 1,

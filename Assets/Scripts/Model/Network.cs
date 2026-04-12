@@ -5,7 +5,11 @@ using UnityEngine;
 
 public class Network : NetworkBehaviour
 {
+    Dictionary<ulong, TradeSession> activeTrades = new Dictionary<ulong, TradeSession>();
+
     public static Network instance;
+    public Network(){
+    }
     private void Awake()
     {
         instance = this;
@@ -204,7 +208,7 @@ void CompleteTradeClientRpc(ulong playerA, ulong playerB)
     }
 }
 
-    Dictionary<ulong, TradeSession> activeTrades = new Dictionary<ulong, TradeSession>();
+    
     public void CancelTrade()
     {
         CancelTradeServerRpc();

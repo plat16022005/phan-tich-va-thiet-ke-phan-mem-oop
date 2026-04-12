@@ -77,6 +77,8 @@ public class GameUI : MonoBehaviour
     public TextMeshProUGUI LvItem1;
     public Image ImageItem2;
     public TextMeshProUGUI LvItem2;
+    public GameUI(){
+    }
     private void Awake()
     {
         instance = this;

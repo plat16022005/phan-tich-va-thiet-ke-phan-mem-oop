@@ -7,9 +7,7 @@ using UnityEngine;
 
 public class GameData
 {
-    public GameData()
-    {
-        
+    public GameData(){
     }
     public QuestContent ViewDetail(int QuestId)
     {

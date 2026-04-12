@@ -5,8 +5,12 @@ using UnityEngine;
 public class Inventory : MonoBehaviour
 {
     public static Inventory instance;
+    private Resource goldRes = new Resource();
     private Characters characters;
+    private List<Items> items;
     private GameData GameData = new GameData();
+    public Inventory(){
+    }
     public int id;
     public int id_player;
     public int id_item;
@@ -31,7 +35,7 @@ public class Inventory : MonoBehaviour
     {
         return InventoryManager.instance.itemsLv[EquipmentId].Item1;
     }
-    private Resource goldRes = new Resource();
+    
     public void Enhance(Items selectedItem)
     {
         int currentGoldQuantity = goldRes.GetQuantity();

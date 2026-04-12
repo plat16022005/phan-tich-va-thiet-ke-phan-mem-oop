@@ -8,9 +8,9 @@ public class Dungeon : MonoBehaviour
 {
     public static Dungeon instance;
     private Characters characters;
-    public Dungeon()
-    {
-        
+    private Monster monster;
+    private Rewards rewards;
+    public Dungeon(){
     }
     public int id;
     public string NameDungeon;

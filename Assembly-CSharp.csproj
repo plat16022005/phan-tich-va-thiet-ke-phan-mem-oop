@@ -73,8 +73,8 @@
     <Compile Include="Assets\Scripts\Controller\UI\PanelController.cs" />
     <Compile Include="Assets\Scripts\Config\ConnectSQL.cs" />
     <Compile Include="Assets\Scripts\Config\SessionManager.cs" />
-    <Compile Include="Assets\Scripts\Model\Weapon.cs" />
     <Compile Include="Assets\Scripts\Manager\InventoryManager.cs" />
+    <Compile Include="Assets\Scripts\Model\UI\Enemy.cs" />
     <Compile Include="Assets\Scripts\Repository\Impl\QuestRepositoryImpl.cs" />
     <Compile Include="Assets\GoogleSignIn\Future.cs" />
     <Compile Include="Assets\Scripts\Manager\SpritesManager.cs" />
@@ -136,6 +136,7 @@
     <Compile Include="Assets\GoogleSignIn\Impl\SignInHelperObject.cs" />
     <Compile Include="Assets\Scripts\Model\UI\Panel\UIPanel.cs" />
     <Compile Include="Assets\Scripts\Model\Avatar.cs" />
+    <Compile Include="Assets\Scripts\Model\UI\Weapon.cs" />
     <Compile Include="Assets\Scripts\Model\QuestContent.cs" />
     <Compile Include="Assets\Scripts\Model\TradeSession.cs" />
     <Compile Include="Assets\Scripts\Controller\EmailController.cs" />
@@ -157,7 +158,6 @@
     <Compile Include="Assets\Scripts\Model\UI\TradeInventoryUI.cs" />
     <Compile Include="Assets\Scripts\Model\UI\Button\ButtonPanel.cs" />
     <Compile Include="Assets\Scripts\Repository\QuestContentRepository.cs" />
-    <Compile Include="Assets\Scripts\Model\Enemy.cs" />
     <Compile Include="Assets\Scripts\Config\PlaySound.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Resource
 {
+    public Resource(){
+    }
     public int GetQuantity()
     {
         return PlayerManager.instance.characters.gold;

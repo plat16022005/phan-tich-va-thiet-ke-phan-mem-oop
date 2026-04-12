@@ -5,6 +5,8 @@ using UnityEngine;
 public class Monster : MonoBehaviour
 {
     public static Monster instance;
+    public Monster(){
+    }
     public string NameMonster = "Monster";
     public int maxHealth = 100;
     private int currentHealth;

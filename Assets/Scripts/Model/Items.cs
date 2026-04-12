@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Items : MonoBehaviour
 {
+    public Items(){
+    }
     public int id;
     public string NameItem;
     public int GetLevel()

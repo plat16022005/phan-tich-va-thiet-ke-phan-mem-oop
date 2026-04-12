@@ -1,5 +1,7 @@
 public class Avatar
 {
+    public Avatar(){    
+    }
     public int character_id { get; set; }
 
     public int hair { get; set; }

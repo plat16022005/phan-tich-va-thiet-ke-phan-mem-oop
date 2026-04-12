@@ -5,9 +5,7 @@ using UnityEngine;
 public class Rewards : MonoBehaviour
 {
     public static Rewards instance;
-    public Rewards()
-    {
-        
+    public Rewards(){
     }
     public int id;
     public int id_dungeon;

@@ -1,5 +1,7 @@
 public class TradeSession
 {
+    public TradeSession(){
+    }
     public ulong playerA;
     public ulong playerB;
 

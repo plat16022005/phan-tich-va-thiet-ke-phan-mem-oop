@@ -1,5 +1,7 @@
 public class Equipment
 {
+    public Equipment(){
+    }
     public int character_id { get; set; }
 
     public int weapon_id { get; set; }

@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class QuestContent
 {
+    public QuestContent(){
+    }
     public int id;
     public int id_quest;
     public string NameQuest;
